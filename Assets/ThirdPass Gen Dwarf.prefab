@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4764098797908108417
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4764098797908108479}
+  - component: {fileID: 4764098797908108478}
+  - component: {fileID: 4764098797908108476}
+  m_Layer: 0
+  m_Name: ThirdPass Gen Dwarf
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4764098797908108479
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4764098797908108417}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 49.58, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4764098797908108478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4764098797908108417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ad2bf01b7a6b7409eb683402aa8669, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_size: {x: 50, y: 50, z: 0}
+  m_center: {x: 0, y: 0, z: -0.2}
+  modelType: 0
+  tiles:
+  - tile: {fileID: 8275587664080295342, guid: 7c176d44d81893948baacbda6fa4d6b0, type: 3}
+    weight: 1
+  - tile: {fileID: 3798526055942454081, guid: 1a4f5357f3390a447bc42ea7f64e6e86, type: 3}
+    weight: 1
+  - tile: {fileID: 5658402381527016502, guid: 2a1ab101713d47040be3523cc1f1e6ee, type: 3}
+    weight: 1
+  - tile: {fileID: 8413612328390699023, guid: f54b5169908eeeb41974f9d3ca1edfe1, type: 3}
+    weight: 1
+  - tile: {fileID: 26474883915434372, guid: bb79d8ccc5cc77045ba8ded2ed64da24, type: 3}
+    weight: 1
+  samples: []
+  overlapSize: {x: 3, y: 3, z: 3}
+  tileSize: {x: 1, y: 1, z: 0}
+  backtrack: 0
+  seed: 0
+  retries: 5
+  stepLimit: 0
+  algorithm: 0
+  recordUndo: 0
+  failureMode: 0
+  uncertaintyTile: {fileID: 0}
+  contradictionTile: {fileID: 0}
+  scaleUncertainyTile: 1
+  skyBox: {fileID: 0}
+  searchInitialConstraints: 1
+  surfaceMesh: {fileID: 0}
+  surfaceOffset: 0
+  surfaceSmoothNormals: 0
+  filterSurfaceSubmeshTiles: 0
+  surfaceSubmeshTiles: []
+--- !u!114 &4764098797908108476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4764098797908108417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 712b5222a3eb0f64c9b33028d67a661e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  secondsPerStep: 0
+  progressPerStep: 1
+  multithread: 1
+  uncertaintyTile: {fileID: 0}
+  scaleUncertainyTile: 1

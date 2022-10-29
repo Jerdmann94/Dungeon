@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1847301319133337395
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1847301319133337393}
+  - component: {fileID: 1847301319133337392}
+  - component: {fileID: 6192082966175808793}
+  m_Layer: 0
+  m_Name: Second Pass Dwarf
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1847301319133337393
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847301319133337395}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 50, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1847301319133337392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847301319133337395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ad2bf01b7a6b7409eb683402aa8669, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_size: {x: 50, y: 50, z: 0}
+  m_center: {x: 0, y: 0, z: 0}
+  modelType: 0
+  tiles:
+  - tile: {fileID: 8526707824746661578, guid: 872d9c9dfef04f54090533cf4a045546, type: 3}
+    weight: 5
+  - tile: {fileID: 4256273575261728806, guid: ee0641a352408e24e8a2129b40139dc2, type: 3}
+    weight: 0.2
+  - tile: {fileID: 7712703212010894783, guid: dcc21c99ed637144caeadbcde20e59bb, type: 3}
+    weight: 0.1
+  - tile: {fileID: 2887620231432790814, guid: af6063e5502554b4f84954a33f112897, type: 3}
+    weight: 0.3
+  - tile: {fileID: 6273735898874427697, guid: b39def9c16372d247819f07bb535e068, type: 3}
+    weight: 0.1
+  - tile: {fileID: 8353320184213889148, guid: d914804b3316b174ebb4e445bc9a6711, type: 3}
+    weight: 0.01
+  samples: []
+  overlapSize: {x: 3, y: 3, z: 3}
+  tileSize: {x: 1, y: 1, z: 0}
+  backtrack: 1
+  seed: 0
+  retries: 5
+  stepLimit: 0
+  algorithm: 0
+  recordUndo: 0
+  failureMode: 0
+  uncertaintyTile: {fileID: 0}
+  contradictionTile: {fileID: 0}
+  scaleUncertainyTile: 1
+  skyBox: {fileID: 0}
+  searchInitialConstraints: 1
+  surfaceMesh: {fileID: 0}
+  surfaceOffset: 0
+  surfaceSmoothNormals: 0
+  filterSurfaceSubmeshTiles: 0
+  surfaceSubmeshTiles: []
+--- !u!114 &6192082966175808793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847301319133337395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 712b5222a3eb0f64c9b33028d67a661e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  secondsPerStep: 0
+  progressPerStep: 1
+  multithread: 1
+  uncertaintyTile: {fileID: 0}
+  scaleUncertainyTile: 1
