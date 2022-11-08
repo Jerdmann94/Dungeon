@@ -120,7 +120,7 @@ namespace Tessera
                 cells = cells.ToList(),
                 tiles = volume.tiles,
                 volumeType = volume.volumeType,
-                
+                generator = volume.generator.name
             };
         }
 

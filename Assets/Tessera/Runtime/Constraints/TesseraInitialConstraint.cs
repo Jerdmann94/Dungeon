@@ -41,6 +41,8 @@ namespace Tessera
         public string Name => name;
 
         public VolumeType volumeType;
+
+        public string generator;
     }
 
     public class TesseraPinConstraint : ITesseraInitialConstraint

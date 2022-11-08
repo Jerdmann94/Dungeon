@@ -3,9 +3,11 @@ using DeBroglie.Constraints;
 using DeBroglie.Topo;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using static Tessera.TesseraGeneratorHelper;
+using Debug = UnityEngine.Debug;
 
 namespace Tessera
 {
@@ -180,10 +182,18 @@ namespace Tessera
                 {
                     if(volumeFilter.volumeType == VolumeType.MaskOut)
                     {
-                        foreach(var cell in volumeFilter.cells)
+
+
+                        if (volumeFilter.generator == CurrentGenerator.generator)
                         {
-                            mask[grid.GetIndex(cell)] = false;
+                            
+                            foreach(var cell in volumeFilter.cells)
+                            {
+                                
+                                mask[grid.GetIndex(cell)] = false;
+                            }
                         }
+                        
                     }
                 }
                 else

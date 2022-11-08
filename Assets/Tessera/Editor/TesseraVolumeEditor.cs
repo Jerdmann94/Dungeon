@@ -25,6 +25,7 @@ namespace Tessera
             {
                 if (volume.generator != generator)
                 {
+                    
                     generator = volume.generator;
                     tileList = generator == null ? null : new TileListUtil(volume.generator, "Tiles", serializedObject.FindProperty("tiles"));
                 }

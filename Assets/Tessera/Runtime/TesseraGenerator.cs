@@ -335,6 +335,7 @@ namespace Tessera
         /// <param name="onCreate">Called for each newly generated tile. By default, they are Instantiated in the scene.</param>
         public TesseraCompletion Generate(TesseraGenerateOptions options = null)
         {
+            
             var e = StartGenerate(options);
             while (e.MoveNext()) { }
             return e.Result;
@@ -529,6 +530,8 @@ namespace Tessera
                 {
                     try
                     {
+                        CurrentGenerator.generator = name;
+                        Debug.Log(CurrentGenerator.generator);
                         Profiler.BeginThreadProfiling("Tessera Generation", name);
                         generatorHelper.FullRun(r >= retries - 1);
                         return generatorHelper.Propagator;

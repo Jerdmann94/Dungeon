@@ -128,6 +128,8 @@ namespace Tessera
 
         private void Run()
         {
+           
+           
             CheckStatus("Propagator is not ready to run");
 
             var t1 = DateTime.Now;
