@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5777673323787894303
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8942229728792939926}
+  - component: {fileID: 4952677756834527057}
+  - component: {fileID: 3116869170076723185}
+  m_Layer: 0
+  m_Name: Beast 2 Vol
+  m_TagString: Untagged
+  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8942229728792939926
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5777673323787894303}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4952677756834527057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5777673323787894303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1efb6dc65363b7479c2f8be4b856e61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  generator: {fileID: 6794104653079380384, guid: f5af914b8f1206843883ae5abc9f1fd6, type: 3}
+  tiles:
+  - {fileID: 8122658151983301521, guid: c732ad40a12c29a4a8753c10794c484b, type: 3}
+  - {fileID: 2177898788653973805, guid: 5ed1debc911aa38498c0cff0ccabb2f6, type: 3}
+  - {fileID: 6922355505067159412, guid: 56512bfcaaf07fe4f9fb32fdaacff3ee, type: 3}
+  - {fileID: 4117221625366496027, guid: 3afa54e1cb9ad1b4d81d931388bd3f78, type: 3}
+  - {fileID: 5663519584672526534, guid: 290269d716db06c4a9727a083ab8318e, type: 3}
+  - {fileID: 7237137610437715089, guid: 7fce84aa283eff14b9431f861e7d70a6, type: 3}
+  - {fileID: 4534416204817928454, guid: a5f7e83c99c8f254ebcb8821e56b31f0, type: 3}
+  - {fileID: 7812299981450299831, guid: 7b7c0713876fc904e98a6ed6b6a521b9, type: 3}
+  - {fileID: 7175730058085519108, guid: 02ec2fda589182541a8039bc595a99c1, type: 3}
+  - {fileID: 8877517145712395454, guid: d8386f04a3d492041be24ff56b9968f3, type: 3}
+  - {fileID: 1312303513198697026, guid: bc31b8e7d49c76b4cbe11cd55d168058, type: 3}
+  - {fileID: 5880605086824445371, guid: 05634d8faca976c429118c08be542628, type: 3}
+  invertArea: 0
+  volumeType: 0
+--- !u!65 &3116869170076723185
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5777673323787894303}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

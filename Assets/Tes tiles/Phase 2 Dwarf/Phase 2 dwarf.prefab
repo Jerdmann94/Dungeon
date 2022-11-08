@@ -1,0 +1,158 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1402125038106988937
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4590025735137175536}
+  - component: {fileID: 4590025735137175539}
+  - component: {fileID: 9094303212280737738}
+  m_Layer: 0
+  m_Name: Phase 2 dwarf
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4590025735137175536
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402125038106988937}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 50, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4590025735137175539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402125038106988937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ad2bf01b7a6b7409eb683402aa8669, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_size: {x: 50, y: 50, z: 0}
+  m_center: {x: 0, y: 0, z: 0}
+  modelType: 0
+  tiles:
+  - tile: {fileID: 8526707824746661578, guid: 872d9c9dfef04f54090533cf4a045546, type: 3}
+    weight: 1
+  - tile: {fileID: 8097690668827151483, guid: 8aa2d7a448b10b349a3985f41454f697, type: 3}
+    weight: 3
+  - tile: {fileID: 4081612355745856006, guid: e57633f22bc84a748b514a5fad9a3bf7, type: 3}
+    weight: 1
+  - tile: {fileID: 4242756636333031511, guid: 716d2cf2adabb5048a38ce00429823ae, type: 3}
+    weight: 1
+  - tile: {fileID: 1607419164635104858, guid: a1d970a7bdb093d408f2cd7a3237d3c1, type: 3}
+    weight: 1
+  - tile: {fileID: 6742511267991329205, guid: 9416779e1ac16e443a20ed3d722830a0, type: 3}
+    weight: 1
+  - tile: {fileID: 4233385925500093141, guid: 5140d61511c8bb44baf4e34ce842ed49, type: 3}
+    weight: 1
+  - tile: {fileID: 5543998496580100589, guid: 9a166baf7cb0a5c42a98e005bdcc465d, type: 3}
+    weight: 1
+  - tile: {fileID: 2265931413622302822, guid: b9786cd7a7ea29b47bf533dfcca4a3dc, type: 3}
+    weight: 1
+  - tile: {fileID: 8796192844830038488, guid: 7c7b1b98b9d60be4b9106979956bc025, type: 3}
+    weight: 1
+  - tile: {fileID: 6219159783245828472, guid: b89a0a3cc7064504ca7175dd80a79d03, type: 3}
+    weight: 1
+  - tile: {fileID: 2203547326514148262, guid: e5dd75549d6778e4fa7031f73a823c1a, type: 3}
+    weight: 1
+  - tile: {fileID: 943738378922682937, guid: 1203009c5f6895b418a90af0d6d42700, type: 3}
+    weight: 1
+  - tile: {fileID: 3443679492721093900, guid: 241dbcc3f9f38834e8eae929ee690781, type: 3}
+    weight: 1
+  - tile: {fileID: 8868853913025527019, guid: 9f6ff4f95cb794b42bc0e37191fe7de1, type: 3}
+    weight: 1
+  - tile: {fileID: 689428536156619810, guid: 3f28853e51f86954eb027fb2345bf193, type: 3}
+    weight: 1
+  - tile: {fileID: 3621326864328594886, guid: b9ff29800a63a1444a8566d41e817ce5, type: 3}
+    weight: 1
+  - tile: {fileID: 2839845786708833561, guid: 4f2dfb92af5f56f4389f1c180ebd9558, type: 3}
+    weight: 1
+  - tile: {fileID: 8359744164611465245, guid: c0ecbbb48c7efac4b9755c0a86a1c678, type: 3}
+    weight: 1
+  - tile: {fileID: 5477764157192623267, guid: cd32a4c6e650317429e647d4a24bda2b, type: 3}
+    weight: 1
+  - tile: {fileID: 8461585168449274578, guid: 53301bc7af83a3142a1aacbaeade8a09, type: 3}
+    weight: 1
+  - tile: {fileID: 5947986638300014658, guid: e9c059719a257e54e81e3af821c69c1f, type: 3}
+    weight: 1
+  - tile: {fileID: 7072128524432593073, guid: 10db093b99b3be54aa0da27f70ca3d11, type: 3}
+    weight: 1
+  - tile: {fileID: 5146967919906475002, guid: 79b48b00dbea4a84face0085d877b92c, type: 3}
+    weight: 1
+  - tile: {fileID: 7610275325753547726, guid: d605ce23d3513214d84dddf9e44926ac, type: 3}
+    weight: 1
+  - tile: {fileID: 3432887433072130363, guid: 3f339d9603606454d80359d41f6412a5, type: 3}
+    weight: 1
+  - tile: {fileID: 6302649856402510629, guid: 59a2e14b4417a74458f708f69563d9d3, type: 3}
+    weight: 1
+  - tile: {fileID: 7127219594557516755, guid: ce8ad7e54beca1e49a7c7879156b5e02, type: 3}
+    weight: 1
+  - tile: {fileID: 6347038179938746247, guid: d79cfa9688d59194c96a1263ef208da0, type: 3}
+    weight: 1
+  - tile: {fileID: 4243124029888374131, guid: 38a0c104ce66ab746b7e432b467fd83d, type: 3}
+    weight: 1
+  - tile: {fileID: 7613433182146132918, guid: 967129719d1b6a242802f30fa7a2bb56, type: 3}
+    weight: 1
+  - tile: {fileID: 3213727038024277053, guid: e150c763f31f4184abdcf57b58771d8c, type: 3}
+    weight: 1
+  - tile: {fileID: 3796955524712394327, guid: 22261bc3a91be51489de261b55e78b95, type: 3}
+    weight: 1
+  - tile: {fileID: 4703943980121633199, guid: 0bc49c9b1fb24e343bcc3ffde4f73a9d, type: 3}
+    weight: 1
+  - tile: {fileID: 4517609839270336099, guid: 54dfb255ed1fc3e4ea6519eb6c9dac3c, type: 3}
+    weight: 1
+  samples: []
+  overlapSize: {x: 3, y: 3, z: 3}
+  tileSize: {x: 1, y: 1, z: 0}
+  backtrack: 1
+  seed: 0
+  retries: 10
+  stepLimit: 0
+  algorithm: 0
+  recordUndo: 0
+  failureMode: 0
+  uncertaintyTile: {fileID: 0}
+  contradictionTile: {fileID: 0}
+  scaleUncertainyTile: 1
+  skyBox: {fileID: 0}
+  searchInitialConstraints: 1
+  surfaceMesh: {fileID: 0}
+  surfaceOffset: 0
+  surfaceSmoothNormals: 0
+  filterSurfaceSubmeshTiles: 0
+  surfaceSubmeshTiles: []
+--- !u!114 &9094303212280737738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402125038106988937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 712b5222a3eb0f64c9b33028d67a661e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  secondsPerStep: 0
+  progressPerStep: 1
+  multithread: 1
+  uncertaintyTile: {fileID: 0}
+  scaleUncertainyTile: 1
