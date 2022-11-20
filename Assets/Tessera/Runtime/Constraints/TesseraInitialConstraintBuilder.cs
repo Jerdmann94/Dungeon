@@ -176,7 +176,7 @@ namespace Tessera
         /// <param name="localToWorldMatrix">The matrix indicating the position and rotation of the tile</param>
         public ITesseraInitialConstraint GetInitialConstraint(TesseraPinned pin, Matrix4x4 localToWorldMatrix)
         {
-            var tile = pin.tile ?? pin.GetComponent<TesseraTile>() ?? throw new Exception($"Tile not defined for {pin}");
+            var tile = pin.tile ?? pin.GetComponent<TesseraSquareTile>() ?? throw new Exception($"Tile not defined for {pin}");
 
             if (!grid.FindCell(tile.center, transform.worldToLocalMatrix * localToWorldMatrix, out var cell, out var rotation))
             {

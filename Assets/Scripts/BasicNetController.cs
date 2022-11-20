@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -5,6 +6,8 @@ namespace HelloWorld
 {
     public class BasicNetController : MonoBehaviour
     {
+        
+
         void OnGUI()
         {
             GUILayout.BeginArea(new Rect(10, 10, 300, 300));
@@ -16,7 +19,7 @@ namespace HelloWorld
             {
                 StatusLabels();
 
-                SubmitNewPosition();
+                //SubmitNewPosition();
             }
 
             GUILayout.EndArea();
@@ -39,7 +42,7 @@ namespace HelloWorld
             GUILayout.Label("Mode: " + mode);
         }
 
-static void SubmitNewPosition()
+/*static void SubmitNewPosition()
         {
             if (GUILayout.Button(NetworkManager.Singleton.IsServer ? "GoNorth" : "Request North"))
             {
@@ -55,6 +58,7 @@ static void SubmitNewPosition()
                     player.Move();
                 }
             }
-        }
+        }*/
+       
     }
 }

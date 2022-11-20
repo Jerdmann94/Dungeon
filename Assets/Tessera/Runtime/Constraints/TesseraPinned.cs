@@ -37,7 +37,7 @@ namespace Tessera
         /// The tile to pin. 
         /// Defaults to a tile component found on the same GameObject
         /// </summary>
-        public TesseraTile tile;
+        public TesseraSquareTile tile;
 
         /// <summary>
         /// Sets the type of pin to apply.

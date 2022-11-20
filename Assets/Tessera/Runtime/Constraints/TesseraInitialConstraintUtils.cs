@@ -64,7 +64,7 @@ namespace Tessera
                     {
                         var modelTile = new Tile(new ModelTile
                         {
-                            Tile = (TesseraTile)pin.tile,
+                            Tile = (TesseraSquareTile)pin.tile,
                             Offset = offset,
                             Rotation = pin.rotation,
                         });
