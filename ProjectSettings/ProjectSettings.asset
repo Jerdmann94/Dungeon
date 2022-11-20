@@ -644,7 +644,7 @@ PlayerSettings:
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
   cloudServicesEnabled:
-    Build: 0
+    Build: 1
     Collab: 0
     Game Performance: 0
     Purchasing: 0
@@ -663,10 +663,10 @@ PlayerSettings:
     m_VersionName: 
   apiCompatibilityLevel: 6
   activeInputHandler: 0
-  cloudProjectId: c14b0e6f-40f1-487c-9b8f-652600dadd09
+  cloudProjectId: 7e692d89-f189-4b7d-85d6-86ca5f22616f
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: DungeonGen
+  projectName: DunGen
   organizationId: erdmannjacob0
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
