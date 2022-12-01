@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
+using Unity.Services.Core;
 using UnityEngine;
 using Unity.Services.Multiplay;
 
@@ -7,7 +10,7 @@ using Unity.Services.Multiplay;
 /// An example of how to use SQP from the server using the Multiplay SDK.
 /// The ServerQueryHandler will report the given information to the Multiplay Service.
 /// </summary>
-public class ServerQueryHandler : MonoBehaviour
+public class ServerQueryHandler : NetworkBehaviour
 {
     private const ushort k_DefaultMaxPlayers = 10;
     private const string k_DefaultServerName = "MyServerExample";
@@ -21,12 +24,26 @@ public class ServerQueryHandler : MonoBehaviour
 
     private async void Start()
     {
-        m_ServerQueryHandler = await MultiplayService.Instance.StartServerQueryHandlerAsync(k_DefaultMaxPlayers, k_DefaultServerName, k_DefaultGameType, k_DefaultBuildId, k_DefaultMap);
+        
+            m_ServerQueryHandler = await MultiplayService.Instance.StartServerQueryHandlerAsync(k_DefaultMaxPlayers,
+                k_DefaultServerName, k_DefaultGameType, k_DefaultBuildId, k_DefaultMap);
+        
     }
 
-    private void Update()
+    private async void Awake()
     {
+        await UnityServices.InitializeAsync();
+        m_ServerQueryHandler = await MultiplayService.Instance.StartServerQueryHandlerAsync(k_DefaultMaxPlayers,
+            k_DefaultServerName, k_DefaultGameType, k_DefaultBuildId, k_DefaultMap);
+
+    }
+
+    private async void Update()
+    {
+        
+        
         m_ServerQueryHandler.UpdateServerCheck();
+
     }
 
     public void ChangeQueryResponseValues(ushort maxPlayers, string serverName, string gameType, string buildId)

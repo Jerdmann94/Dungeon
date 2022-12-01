@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using Unity.Services.Multiplay;
 using UnityEngine;
 
 /// <summary>
 /// An example of how to access and react to multiplay server events.
 /// </summary>
-public class ServerEvents : MonoBehaviour
+public class ServerEvents : NetworkBehaviour
 {
 private MultiplayEventCallbacks m_MultiplayEventCallbacks;
 private IServerEvents m_ServerEvents;
@@ -17,15 +18,19 @@ private IServerEvents m_ServerEvents;
 /// </summary>
 private async void Start()
 	{
-// We must first prepare our callbacks like so:
-		m_MultiplayEventCallbacks = new MultiplayEventCallbacks();
-		m_MultiplayEventCallbacks.Allocate += OnAllocate;
-		m_MultiplayEventCallbacks.Deallocate += OnDeallocate;
-		m_MultiplayEventCallbacks.Error += OnError;
-		m_MultiplayEventCallbacks.SubscriptionStateChanged += OnSubscriptionStateChanged;
+		if (IsServer)
+		{
+			// We must first prepare our callbacks like so:
+			m_MultiplayEventCallbacks = new MultiplayEventCallbacks();
+			m_MultiplayEventCallbacks.Allocate += OnAllocate;
+			m_MultiplayEventCallbacks.Deallocate += OnDeallocate;
+			m_MultiplayEventCallbacks.Error += OnError;
+			m_MultiplayEventCallbacks.SubscriptionStateChanged += OnSubscriptionStateChanged;
 
-// We must then subscribe.
-		m_ServerEvents = await MultiplayService.Instance.SubscribeToServerEventsAsync(m_MultiplayEventCallbacks);
+			// We must then subscribe.
+			m_ServerEvents = await MultiplayService.Instance.SubscribeToServerEventsAsync(m_MultiplayEventCallbacks);
+
+		}
 	}
 
 /// <summary>

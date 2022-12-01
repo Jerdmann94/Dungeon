@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Netcode;
+using Unity.Services.Core;
 using Unity.Services.Multiplay;
 using UnityEngine;
 
-public class ServerConfig : MonoBehaviour
+public class ServerConfig : NetworkBehaviour
 {
     
     /// <summary>
@@ -22,12 +24,18 @@ public class ServerConfig : MonoBehaviour
     }
     private async void ReadyingServer()
     {
-// Once the server is back to a blank slate and ready to accept new players
+        
+        
+        // Once the server is back to a blank slate and ready to accept new players
         await MultiplayService.Instance.ReadyServerForPlayersAsync();
+        Debug.Log("Server is ready for players");
+
     }
 
-    public void Awake()
+    public async void Awake()
     {
+        await UnityServices.InitializeAsync();
+        
         ReadyingServer();
         LogServerConfig();
         
