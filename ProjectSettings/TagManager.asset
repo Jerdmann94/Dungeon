@@ -8,6 +8,7 @@ TagManager:
   - Attack
   - Enemy
   - Canvas
+  - EnemyAwake
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - PlayerLayer
   - Enemy
   - Attacks
-  - 
+  - EnemyAwake
   - 
   - 
   - 
