@@ -33,6 +33,10 @@ public class AttackScript : MonoBehaviour
            gameObject.SetActive(false);
             
         }
+        else
+        {
+            Debug.Log(" raycast did not hit");
+        }
     }
     
 }

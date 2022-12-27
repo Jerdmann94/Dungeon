@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -6,18 +7,20 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DragDropAttackItem : NetworkBehaviour, IPointerDownHandler, IBeginDragHandler,IEndDragHandler,IDragHandler
+public class DragDropAttackItem : MonoBehaviour, IPointerDownHandler, IBeginDragHandler,IEndDragHandler,IDragHandler
 {
     public Texture2D texture;
-    public GameObject attackObjectPrefab;
+    //public GameObject attackObjectPrefab;
     private RectTransform rectTransform;
+    public GameItem currentRune;
+    public StaticReference attackManager;
     // Start is called before the first frame update
     void Start()
     {
         rectTransform = GetComponent<RectTransform>();
+        
     }
     
-
     public void OnPointerDown(PointerEventData eventData)
     {
         
@@ -36,21 +39,23 @@ public class DragDropAttackItem : NetworkBehaviour, IPointerDownHandler, IBeginD
     }
     public void OnEndDrag(PointerEventData eventData)
     {
+        
         Cursor.SetCursor(null,Vector2.zero, CursorMode.Auto);
+
+        var x = attackManager.target.GetComponent<AttackManager>();
+        Debug.Log(x);
+        Debug.Log(Camera.main);
+        Debug.Log(currentRune.name);
         
         //RAYCAST TO DRAG POINT
-        SpawnAttackItemServerRpc(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-       
-       
-        
-        
-        
+        attackManager.target.GetComponent<AttackManager>().SpawnAttackItemServerRpc(Camera.main.ScreenToWorldPoint(Input.mousePosition),currentRune.name);
         //Debug.Log("end drag");
     }
 
     [ServerRpc(RequireOwnership = false)]
     private void SpawnAttackItemServerRpc(Vector3 worldPosition,ServerRpcParams rpcParams = default)
     {
+        /*Debug.Log("Doing Attack");
         var clientId = rpcParams.Receive.SenderClientId;
         if (!NetworkManager.ConnectedClients.ContainsKey(clientId)) return;
         var client = NetworkManager.ConnectedClients[clientId];
@@ -74,7 +79,7 @@ public class DragDropAttackItem : NetworkBehaviour, IPointerDownHandler, IBeginD
         var spawnLoc = new Vector3Int(Mathf.RoundToInt(worldPosition.x), Mathf.RoundToInt(worldPosition.y), 1);
         var attackObject = Instantiate(attackObjectPrefab, spawnLoc,
             quaternion.identity);
-        attackObject.GetComponent<NetworkObject>().Spawn();
+        attackObject.GetComponent<NetworkObject>().Spawn();*/
 
     }
 }

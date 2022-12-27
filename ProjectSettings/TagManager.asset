@@ -9,6 +9,13 @@ TagManager:
   - Enemy
   - Canvas
   - EnemyAwake
+  - TestDummy
+  - TreasurePanel
+  - AttackPanelObjectCollection
+  - InventoryPanelObjectCollection
+  - TreasurePanelObjectCollection
+  - InventoryManager
+  - AttackManager
   layers:
   - Default
   - TransparentFX

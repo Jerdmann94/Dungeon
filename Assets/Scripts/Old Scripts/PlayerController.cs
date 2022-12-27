@@ -23,13 +23,19 @@ public class PlayerController : NetworkBehaviour
         public Slider healthSlider;
         public NetworkVariable<int> health = new NetworkVariable<int>(100);
 
+        public InventoryManager inventoryManager;
+        public AttackPanelManager attackPanelManager;
+
+        
         private Camera mainCam;
         
         public override void OnNetworkSpawn()
         {
+            inventoryManager = GameObject.FindWithTag("InventoryManager").GetComponent<InventoryManager>();
+            attackPanelManager = GameObject.FindWithTag("AttackPanelObjectCollection").GetComponent<AttackPanelManager>();
             health.OnValueChanged += (value, newValue) =>
             {
-                Debug.Log(value + " new value " + newValue);
+                //Debug.Log(value + " new value " + newValue);
                 healthSlider.value = newValue;
             };
             if (!IsOwner) return;
