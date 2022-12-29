@@ -842,10 +842,16 @@ MonoBehaviour:
   playerMask:
     serializedVersion: 2
     m_Bits: 64
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 128
   destroyedWallObj: {fileID: 4534416204817928448, guid: a5f7e83c99c8f254ebcb8821e56b31f0, type: 3}
   healthSlider: {fileID: 4519476451685557152}
   health:
     m_InternalValue: 100
+  inventoryManager: {fileID: 0}
+  attackPanelManager: {fileID: 0}
+  textManager: {fileID: 11400000, guid: 56a07be6150fd9245a5c41e229703e38, type: 2}
 --- !u!114 &5617411282462506145
 MonoBehaviour:
   m_ObjectHideFlags: 0

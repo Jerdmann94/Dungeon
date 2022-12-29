@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loot:
   - {fileID: 11400000, guid: 0303c3c0da2630e4dbb9433874ecfa64, type: 2}
+  - {fileID: 11400000, guid: 0303c3c0da2630e4dbb9433874ecfa64, type: 2}
+  - {fileID: 11400000, guid: 0303c3c0da2630e4dbb9433874ecfa64, type: 2}

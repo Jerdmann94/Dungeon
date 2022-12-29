@@ -21,8 +21,7 @@ public class TreasureInventoryManager : MonoBehaviour
             Destroy(child);
         }
 
-        var obj =Instantiate(inventorySlot, treasureParent.transform);
-        obj.GetComponent<DragAndDropLoot>().currentLocation = OnDropType.Treasure;
+       
     }
     
 

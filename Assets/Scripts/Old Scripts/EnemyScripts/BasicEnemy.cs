@@ -9,15 +9,16 @@ public class BasicEnemy : NetworkBehaviour
     public Slider healthSlider;
     public int maxHealth;
     public GameObject treasurePrefab;
-    private int currentHealth;
+    private NetworkVariable<int> currentHealth = new NetworkVariable<int>();
     [SerializeField] private AIDestinationSetter setter;
     private BasicEnemyMelee basicEnemyMelee;
 
+    public StaticReference textManager;
     private void Awake()
     {
         healthSlider.maxValue = maxHealth;
         healthSlider.value = maxHealth;
-        currentHealth = maxHealth;
+        currentHealth.Value = maxHealth;
         setter = gameObject.GetComponent<AIDestinationSetter>();
         basicEnemyMelee = gameObject.GetComponent<BasicEnemyMelee>();
 
@@ -26,6 +27,11 @@ public class BasicEnemy : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         setter = gameObject.GetComponent<AIDestinationSetter>();
+        currentHealth.OnValueChanged += (value, newValue) =>
+        {
+            //Debug.Log(value + " new value " + newValue);
+            healthSlider.value = newValue;
+        };
         base.OnNetworkSpawn();
     }
 
@@ -42,7 +48,10 @@ public class BasicEnemy : NetworkBehaviour
         if (!collision.gameObject.CompareTag("Attack"))
             return;
         var attackScript = collision.gameObject.GetComponent<AttackScript>();
-        PopUpText.CreatePopUp(transform.position, attackScript.damage, Color.red);
+        var textMan = textManager.target.GetComponent<TextManager>();
+        Debug.Log(attackScript + " " + textMan);
+        textMan.testMethod();
+        textMan.CreatePopUp(transform.position, attackScript.damage, Color.red);
         Debug.Log("Damage: " + attackScript.damage );
         HealthChange(-attackScript.damage);
     }
@@ -60,11 +69,11 @@ public class BasicEnemy : NetworkBehaviour
     }
     private void HealthChange(int i)
     {
-        currentHealth += i;
-        healthSlider.value = currentHealth;
-        if (currentHealth <=0)
+        currentHealth.Value += i;
+        healthSlider.value = currentHealth.Value;
+        if (currentHealth.Value <=0)
         {
-            DeSpawnServerRpc();
+            ServerSideDespawn();
             
         }
     }
@@ -72,15 +81,24 @@ public class BasicEnemy : NetworkBehaviour
     [ServerRpc]
     private void DeSpawnServerRpc()
     {
-        SpawnTreasureObjectServerRpc();
+        ServerSideDespawn();
+        
+    }
+
+    private void ServerSideDespawn()
+    {
+        if (!IsServer)
+            return;
+        SpawnTreasureObject();
         GetComponent<NetworkObject>().Despawn(this);
     }
 
-    [ServerRpc]
-    private void SpawnTreasureObjectServerRpc()
+    
+    private void SpawnTreasureObject()
     {
         var position = transform.position;
         var pos = new Vector3(position.x, position.y, position.z);
-        var treasure =  Instantiate(treasurePrefab, position,Quaternion.identity)as GameObject;
+        var treasure = Instantiate(treasurePrefab, position, Quaternion.identity);
+        treasure.GetComponent<NetworkObject>().Spawn();
     }
 }

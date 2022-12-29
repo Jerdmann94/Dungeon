@@ -48,8 +48,9 @@ public class BasicEnemyMelee : NetworkBehaviour
     // ALL DAMAGE THINGS SHOULD BE DONE HERE
     private void DoDamageToTarget()
     {
-        //Debug.Log("doing melee to player");
-        playerController.health.Value -= damage;
+        Debug.Log("doing melee to player");
+        playerController.HealthChangeFromServer(-damage);
+        //playerController.health.Value -= damage;
         timer = 0;
     }
 

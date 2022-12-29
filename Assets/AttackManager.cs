@@ -8,6 +8,7 @@ using UnityEngine;
 public class AttackManager : NetworkBehaviour
 
 {
+    public GameObject attackObjectPrefab;
     public StaticReference managerReference;
     private void Start()
     {
@@ -23,9 +24,11 @@ public class AttackManager : NetworkBehaviour
         //Check if player has this rune and enough of them to cast this
         var pc = client.PlayerObject.GetComponent<PlayerController>();
         var gameItem = pc.attackPanelManager.runesInAttackPanel.Find(item => item.name == runeName);
+        
         if (gameItem == null)
             return;
         
+        Debug.Log("Player has rune in inventory");
         var cPos = client.PlayerObject.transform.position;
         
         // CHECK IF LOCATION IS CLOSE ENOUGH TO PLAYER
@@ -44,9 +47,9 @@ public class AttackManager : NetworkBehaviour
         // SPAWN AN ATTACK OBJECT
 
         var spawnLoc = new Vector3Int(Mathf.RoundToInt(worldPosition.x), Mathf.RoundToInt(worldPosition.y), 1);
-        //var attackObject = Instantiate(attackObjectPrefab, spawnLoc,
-            //quaternion.identity);
-        //attackObject.GetComponent<NetworkObject>().Spawn();
+        var attackObject = Instantiate(attackObjectPrefab, spawnLoc,
+            quaternion.identity);
+        attackObject.GetComponent<NetworkObject>().Spawn();
 
     }
 }

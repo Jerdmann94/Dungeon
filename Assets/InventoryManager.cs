@@ -21,9 +21,6 @@ public class InventoryManager : MonoBehaviour
         {
             Destroy(child);
         }
-
-        var obj =Instantiate(inventorySlot, inventoryParent.transform);
-        obj.GetComponent<DragAndDropLoot>().currentLocation = OnDropType.Inventory;
     }
 
 

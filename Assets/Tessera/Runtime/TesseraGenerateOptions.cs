@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEngine;
 
 namespace Tessera
 {
@@ -19,7 +20,7 @@ namespace Tessera
     public class TesseraGenerateOptions
     {
         /// <summary>
-        /// Called for each newly generated tile. By default, <see cref="Tessera.TesseraGenerator.Instantiate(Tessera.TesseraTileInstance,Transform)"/> is used.
+        /// Called for each newly generated tile. By default, <see cref="Tessera.TesseraGenerator.Instantiate(Tessera.TesseraTileInstance,RuleTile.TilingRuleOutput.Transform)"/> is used.
         /// </summary>
         public Action<TesseraTileInstance> onCreate;
 

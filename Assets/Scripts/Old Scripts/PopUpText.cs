@@ -5,47 +5,64 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using Unity.Mathematics;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using Cache = UnityEngine.Cache;
 
-public class PopUpText : MonoBehaviour
+public class PopUpText : NetworkBehaviour
 {
     private static GameObject _textPrefab;
-    private TMP_Text textMeshPro;
+    public TMP_Text textMeshPro;
     private static GameObject _canvas;
     private static readonly float TextDelay = 6f;
+
+    private NetworkVariable<int> test = new NetworkVariable<int>();
+    
 
     private void Awake()
     {
         textMeshPro = GetComponent<TextMeshPro>();
     }
 
-    private void Setup(int amount)
+    public override void OnNetworkSpawn()
     {
-        textMeshPro.text = amount.ToString();
+        base.OnNetworkSpawn();
+        if (textMeshPro != null)
+        {
+            textMeshPro.text = test.Value.ToString();
+        }
+        
     }
 
-    public static PopUpText CreatePopUp(Vector3 position, int amount,Color color)
+
+    public void Setup(int amount)
+    {
+        test.Value = amount;
+        textMeshPro.text = test.Value.ToString();
+        Debug.Log(test.Value);
+
+    }
+
+    
+
+    /*[ClientRpc]
+    private static void SpawnTextClientRpc(Vector3 position, int amount,Color color)
     {
         if (_textPrefab == null)
         {
             _textPrefab = Resources.Load<GameObject>("Text/textPrefab");
-            Debug.Log("Loading Text Resource");
         }
-        _canvas = GameObject.FindWithTag("Canvas");
         var obj = Instantiate(_textPrefab, position, quaternion.identity);
-        obj.transform.SetParent(_canvas.transform);
-        
+        obj.GetComponent<NetworkObject>().Spawn();
         var popUp = obj.GetComponent<PopUpText>();
-        //Debug.Log(popUp);
         popUp.Setup(amount);
         popUp.textMeshPro.color = color;
-        //MoveText(obj.GetComponent<RectTransform>());
         var rect = popUp.GetComponent<RectTransform>();
         obj.GetComponent<RectTransform>().DOAnchorPos(rect.anchoredPosition +Vector2.up, .1f).SetEase(Ease.OutFlash);
         Destroy(popUp.gameObject,.5f);
-        return popUp;
-    }
+    }*/
+    
     
 }

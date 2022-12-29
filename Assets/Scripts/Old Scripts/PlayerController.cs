@@ -19,13 +19,14 @@ public class PlayerController : NetworkBehaviour
         public BoxCollider2D west;
         public LayerMask wallMask;
         public LayerMask playerMask;
+        public LayerMask enemyMask;
         public GameObject destroyedWallObj;
         public Slider healthSlider;
         public NetworkVariable<int> health = new NetworkVariable<int>(100);
 
         public InventoryManager inventoryManager;
         public AttackPanelManager attackPanelManager;
-
+        public StaticReference textManager;
         
         private Camera mainCam;
         
@@ -142,21 +143,21 @@ public class PlayerController : NetworkBehaviour
             var layerMask = wallMask;
             //var layerMask = LayerMask.GetMask(wallMask.ToString(), playerMask.ToString());
             if (moveX != 0) {
-                if (moveX < 0&& !west.IsTouchingLayers(layerMask) && !west.IsTouchingLayers(playerMask) )
+                if (moveX < 0&& !west.IsTouchingLayers(layerMask) && !west.IsTouchingLayers(playerMask) && !west.IsTouchingLayers(enemyMask)  )
                 {
                     newPosition.x =+ -1;
                 }
-                else if (moveX > 0&& !east.IsTouchingLayers(layerMask) && !east.IsTouchingLayers(playerMask))
+                else if (moveX > 0&& !east.IsTouchingLayers(layerMask) && !east.IsTouchingLayers(playerMask) && !east.IsTouchingLayers(enemyMask) )
                 {
                     newPosition.x =+ 1;
                 }
             }
             if (moveY != 0) {
-                if (moveY < 0 && !south.IsTouchingLayers(layerMask) && !south.IsTouchingLayers(playerMask))
+                if (moveY < 0 && !south.IsTouchingLayers(layerMask) && !south.IsTouchingLayers(playerMask)&& !south.IsTouchingLayers(enemyMask) )
                 {
                     newPosition.y =+ -1;
                 }
-                else if (moveY > 0 &&!north.IsTouchingLayers(layerMask) && !north.IsTouchingLayers(playerMask))
+                else if (moveY > 0 &&!north.IsTouchingLayers(layerMask) && !north.IsTouchingLayers(playerMask)&& !north.IsTouchingLayers(enemyMask) )
                 {
                     newPosition.y =+ 1;
                 }
@@ -206,6 +207,8 @@ public class PlayerController : NetworkBehaviour
         }
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            if (IsClient)
+                return;
             if (!collision.gameObject.CompareTag("Attack"))
                 return;
             
@@ -217,15 +220,23 @@ public class PlayerController : NetworkBehaviour
             }
             attackScript.hitList.Add(gameObject);
             
-            PopUpText.CreatePopUp(transform.position, attackScript.damage, Color.red);
+            textManager.target.GetComponent<TextManager>().CreatePopUp(transform.position, attackScript.damage, Color.red);
             HealthChangeServerRpc(-attackScript.damage);
             healthSlider.value = health.Value;
         }
         [ServerRpc(RequireOwnership = false)]
-        private void HealthChangeServerRpc(int i,ServerRpcParams rpcParams = default)
+        private void HealthChangeServerRpc(int i)
         {
-            var clientId = rpcParams.Receive.SenderClientId;
-            if (!NetworkManager.ConnectedClients.ContainsKey(clientId)) return;
+            HealthChangeFromServer(i);
+        }
+
+        public void HealthChangeFromServer(int i)
+        {
+            if (!IsServer)
+                return;
+            Debug.Log("Health Change from Server");
+            textManager.target.GetComponent<TextManager>().CreatePopUp(transform.position, i, Color.red);
+
             health.Value += i;
             healthSlider.value = health.Value;
         }
@@ -235,7 +246,7 @@ public class PlayerController : NetworkBehaviour
         {
             var clientId = rpcParams.Receive.SenderClientId;
             
-            if (!NetworkManager.ConnectedClients.ContainsKey(clientId)) return;
+            //if (!NetworkManager.ConnectedClients.ContainsKey(clientId)) return;
             var client = NetworkManager.ConnectedClients[clientId];
             MovePlayerToSpawnServerRpc();
             client.PlayerObject.GetComponent<PlayerController>().HealthChangeServerRpc(100);

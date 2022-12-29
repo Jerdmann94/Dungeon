@@ -22,7 +22,7 @@ public class AttackPanelManager : MonoBehaviour
         runesInAttackPanel.Add(new BasicRune(starterRune));
         foreach (Transform child in transform)
         {
-            //Destroy(child.gameObject);
+            Destroy(child.gameObject);
         }
 
         foreach (var item in runesInAttackPanel)

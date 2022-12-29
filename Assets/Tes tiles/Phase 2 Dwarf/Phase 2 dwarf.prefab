@@ -119,6 +119,8 @@ MonoBehaviour:
     weight: 1
   - tile: {fileID: 4517609839270336099, guid: 54dfb255ed1fc3e4ea6519eb6c9dac3c, type: 3}
     weight: 1
+  - tile: {fileID: 8097690668827151483, guid: 4293aa070e0a9b34ba63789271e100d7, type: 3}
+    weight: 1
   samples: []
   overlapSize: {x: 3, y: 3, z: 3}
   tileSize: {x: 1, y: 1, z: 0}
