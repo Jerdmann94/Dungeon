@@ -94,5 +94,6 @@ MonoBehaviour:
   - {fileID: 3796955524712394327, guid: 22261bc3a91be51489de261b55e78b95, type: 3}
   - {fileID: 4703943980121633199, guid: 0bc49c9b1fb24e343bcc3ffde4f73a9d, type: 3}
   - {fileID: 4517609839270336099, guid: 54dfb255ed1fc3e4ea6519eb6c9dac3c, type: 3}
+  - {fileID: 8097690668827151483, guid: 4293aa070e0a9b34ba63789271e100d7, type: 3}
   invertArea: 0
   volumeType: 0
