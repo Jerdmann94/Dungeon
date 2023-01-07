@@ -7,8 +7,12 @@ using Unity.Services.Matchmaker;
 using Unity.Services.Matchmaker.Models;
 using Matchplay.Shared;
 
-namespace Matchplay.Client
-{
+using Unity.Services.Lobbies.Models;
+
+using Unity.Services.Lobbies;
+using Player = Unity.Services.Matchmaker.Models.Player;
+
+
     public enum MatchmakerPollingResult
     {
         Success,
@@ -34,6 +38,62 @@ namespace Matchplay.Client
         CancellationTokenSource m_CancelToken;
         const int k_GetTicketCooldown = 1000;
 
+        
+        public async Task<MatchmakingResult> Matchmake(Lobby lobby)
+        {
+            
+            m_CancelToken = new CancellationTokenSource();
+            //var createTicketOptions = UserDataToTicketRuleOptions(data);
+            //{ new Player(data.userAuthId, data.userGamePreferences) };
+            var players = new List<Player>();
+            foreach (var p in lobby.Players)
+            {
+                players.Add(new Player(p.Data["userAuthId"].Value));
+                Debug.Log("Adding player to matchmaking ticket");
+            }
+            try
+            {
+                m_IsMatchmaking = true;
+                var createResult = await MatchmakerService.Instance.CreateTicketAsync(players, new CreateTicketOptions());
+                
+                
+                m_LastUsedTicket = createResult.Id;
+                try
+                {
+                    //Polling Loop, cancelling should take us all the way to the method
+                    while (!m_CancelToken.IsCancellationRequested)
+                    {
+                        var checkTicket = await MatchmakerService.Instance.GetTicketAsync(m_LastUsedTicket);
+
+                        if (checkTicket.Type == typeof(MultiplayAssignment))
+                        {
+                            var matchAssignment = (MultiplayAssignment)checkTicket.Value;
+
+                            if (matchAssignment.Status == MultiplayAssignment.StatusOptions.Found)
+                                return ReturnMatchResult(MatchmakerPollingResult.Success, "", matchAssignment);
+                            if (matchAssignment.Status == MultiplayAssignment.StatusOptions.Timeout ||
+                                matchAssignment.Status == MultiplayAssignment.StatusOptions.Failed)
+                                return ReturnMatchResult(MatchmakerPollingResult.MatchAssignmentError,
+                                    $"Ticket: {m_LastUsedTicket} - {matchAssignment.Status} - {matchAssignment.Message}");
+
+                            Debug.Log($"Polled Ticket: {m_LastUsedTicket} Status: {matchAssignment.Status} ");
+                        }
+
+                        await Task.Delay(k_GetTicketCooldown);
+                    }
+                }
+                catch (MatchmakerServiceException e)
+                {
+                    return ReturnMatchResult(MatchmakerPollingResult.TicketRetrievalError, e.ToString());
+                }
+            }
+            catch (MatchmakerServiceException e)
+            {
+                return ReturnMatchResult(MatchmakerPollingResult.TicketCreationError, e.ToString());
+            }
+
+            return ReturnMatchResult(MatchmakerPollingResult.TicketCancellationError, "Cancelled Matchmaking");
+        }
         /// <summary>
         /// Create a ticket for the one user and begin matchmaking with their preferences
         /// </summary>
@@ -48,6 +108,59 @@ namespace Matchplay.Client
                 m_IsMatchmaking = true;
                 var createResult = await MatchmakerService.Instance.CreateTicketAsync(players, createTicketOptions);
 
+                m_LastUsedTicket = createResult.Id;
+                try
+                {
+                    //Polling Loop, cancelling should take us all the way to the method
+                    while (!m_CancelToken.IsCancellationRequested)
+                    {
+                        var checkTicket = await MatchmakerService.Instance.GetTicketAsync(m_LastUsedTicket);
+
+                        if (checkTicket.Type == typeof(MultiplayAssignment))
+                        {
+                            var matchAssignment = (MultiplayAssignment)checkTicket.Value;
+
+                            if (matchAssignment.Status == MultiplayAssignment.StatusOptions.Found)
+                                return ReturnMatchResult(MatchmakerPollingResult.Success, "", matchAssignment);
+                            if (matchAssignment.Status == MultiplayAssignment.StatusOptions.Timeout ||
+                                matchAssignment.Status == MultiplayAssignment.StatusOptions.Failed)
+                                return ReturnMatchResult(MatchmakerPollingResult.MatchAssignmentError,
+                                    $"Ticket: {m_LastUsedTicket} - {matchAssignment.Status} - {matchAssignment.Message}");
+
+                            Debug.Log($"Polled Ticket: {m_LastUsedTicket} Status: {matchAssignment.Status} ");
+                        }
+
+                        await Task.Delay(k_GetTicketCooldown);
+                    }
+                }
+                catch (MatchmakerServiceException e)
+                {
+                    return ReturnMatchResult(MatchmakerPollingResult.TicketRetrievalError, e.ToString());
+                }
+            }
+            catch (MatchmakerServiceException e)
+            {
+                return ReturnMatchResult(MatchmakerPollingResult.TicketCreationError, e.ToString());
+            }
+
+            return ReturnMatchResult(MatchmakerPollingResult.TicketCancellationError, "Cancelled Matchmaking");
+        }
+        public async Task<MatchmakingResult> Matchmake(List<UserData> data)
+        {
+            m_CancelToken = new CancellationTokenSource();
+            //var createTicketOptions = UserDataToTicketRuleOptions(data);
+            var players = new List<Player>();
+            foreach (var d in data)
+            {
+                players.Add(new Player(d.userAuthId,d.userGamePreferences));
+            }
+            //var players = new List<Player> { new Player(data.userAuthId, data.userGamePreferences) };
+            try
+            {
+                m_IsMatchmaking = true;
+                //var createResult = await MatchmakerService.Instance.CreateTicketAsync(players, createTicketOptions);
+                var createResult =
+                    await MatchmakerService.Instance.CreateTicketAsync(players, new CreateTicketOptions());
                 m_LastUsedTicket = createResult.Id;
                 try
                 {
@@ -162,4 +275,3 @@ namespace Matchplay.Client
             m_CancelToken?.Dispose();
         }
     }
-}

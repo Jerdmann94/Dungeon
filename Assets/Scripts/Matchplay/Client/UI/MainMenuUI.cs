@@ -182,7 +182,7 @@ namespace Matchplay.Client.UI
 
         #region buttonPresses
 
-        void SetMatchmakerMode()
+        public void SetMatchmakerMode()
         {
             m_LocalLaunchMode = false;
             if (m_AuthState == AuthState.Authenticated)
@@ -196,7 +196,7 @@ namespace Matchplay.Client.UI
             m_IPPortGroup.contentContainer.style.display = DisplayStyle.None;
         }
 
-        void SetLocalGameMode()
+        public void SetLocalGameMode()
         {
             m_LocalLaunchMode = true;
             m_ButtonGroup.contentContainer.SetEnabled(true);
@@ -207,7 +207,7 @@ namespace Matchplay.Client.UI
             m_PlayButton.text = "Play";
         }
 
-        void PlayButtonPressed()
+        public void PlayButtonPressed()
         {
             if (m_LocalLaunchMode)
             {
@@ -225,7 +225,7 @@ namespace Matchplay.Client.UI
             else
             {
 #pragma warning disable 4014
-                gameManager.MatchmakeAsync(OnMatchMade);
+                //gameManager.MatchmakeAsync(OnMatchMade);
 #pragma warning restore 4014
                 SetMenuState(MainMenuPlayState.MatchMaking);
             }

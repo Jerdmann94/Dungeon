@@ -3,6 +3,7 @@ using UnityEngine;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Matchplay.Networking;
+using Matchplay.Shared;
 using UnityEngine.SceneManagement;
 
 namespace Matchplay.Client
@@ -40,6 +41,12 @@ namespace Matchplay.Client
             unityTransport.SetConnectionData(ipaddress, (ushort)port);
             ConnectClient();
         }
+        public void StartClient(string ipaddress, int port, UserData user)
+        {
+            var unityTransport = m_NetworkManager.gameObject.GetComponent<UnityTransport>();
+            unityTransport.SetConnectionData(ipaddress, (ushort)port);
+            ConnectClient(user);
+        }
 
         public void DisconnectClient()
         {
@@ -53,6 +60,32 @@ namespace Matchplay.Client
         void ConnectClient()
         {
             var userData = ClientSingleton.Instance.Manager.User.Data;
+            var payload = JsonUtility.ToJson(userData);
+
+            var payloadBytes = System.Text.Encoding.UTF8.GetBytes(payload);
+
+            m_NetworkManager.NetworkConfig.ConnectionData = payloadBytes;
+            m_NetworkManager.NetworkConfig.ClientConnectionBufferTimeout = k_TimeoutDuration;
+
+            //  If the socket connection fails, we'll hear back by getting an ReceiveLocalClientDisconnectStatus callback for ourselves and get a message telling us the reason
+            //  If the socket connection succeeds, we'll get our  ReceiveLocalClientConnectStatus callback This is where game-layer failures will be reported.
+            if (m_NetworkManager.StartClient())
+            {
+                Debug.Log("Starting Client!");
+                MatchplayNetworkMessenger.RegisterListener(NetworkMessage.LocalClientConnected,
+                    ReceiveLocalClientConnectStatus);
+                MatchplayNetworkMessenger.RegisterListener(NetworkMessage.LocalClientDisconnected,
+                    ReceiveLocalClientDisconnectStatus);
+            }
+            else
+            {
+                Debug.LogWarning($"Could not Start Client!");
+                OnLocalDisconnection?.Invoke(ConnectStatus.Undefined);
+            }
+        }
+        void ConnectClient(UserData user)
+        {
+            var userData = user;
             var payload = JsonUtility.ToJson(userData);
 
             var payloadBytes = System.Text.Encoding.UTF8.GetBytes(payload);

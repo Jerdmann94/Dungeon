@@ -65,8 +65,12 @@ namespace Matchplay.Server
         {
             m_NetworkManager.SceneManager.LoadScene(startingGameInfo.ToSceneName, LoadSceneMode.Single);
 
+            Debug.LogWarning($"gameScene loaded");
+
             var localNetworkedSceneLoaded = false;
             m_NetworkManager.SceneManager.OnLoadComplete += CreateAndSetSynchedServerData;
+
+            Debug.LogWarning($"create synched server data");
 
             void CreateAndSetSynchedServerData(ulong clientId, string sceneName, LoadSceneMode sceneMode)
             {
@@ -89,6 +93,7 @@ namespace Matchplay.Server
                 Debug.LogWarning($"Timed out waiting for Server Scene Loading: Not able to Load Scene");
                 return null;
             }
+            Debug.LogWarning($"Right before instantiate");
 
             m_SynchedServerData = GameObject.Instantiate(Resources.Load<SynchedServerData>("SynchedServerData"));
             m_SynchedServerData.GetComponent<NetworkObject>().Spawn();
@@ -115,6 +120,7 @@ namespace Matchplay.Server
         /// <param name="response">Data for approval status and any optional player object spawn information to be returned.</param>
         void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
         {
+            Debug.Log("INSIDE APPROVAL CHECK");
             if (request.Payload.Length > k_MaxConnectPayload)
             {
                 //Set response data
@@ -150,6 +156,7 @@ namespace Matchplay.Server
             m_NetworkIdToAuth[request.ClientNetworkId] = userData.userAuthId;
             m_ClientData[userData.userAuthId] = userData;
             OnPlayerJoined?.Invoke(userData);
+            Debug.Log("on player joined action invoked" + OnPlayerJoined);
 
             //Set response data
             response.Approved = true;
@@ -177,6 +184,7 @@ namespace Matchplay.Server
             SendClientDisconnected(networkId, ConnectStatus.GenericDisconnect);
             if (m_NetworkIdToAuth.TryGetValue(networkId, out var authId))
             {
+                Debug.Log("Player has disconnected, we should see message from User Left method");
                 m_NetworkIdToAuth?.Remove(networkId);
                 OnPlayerLeft?.Invoke(m_ClientData[authId]);
 

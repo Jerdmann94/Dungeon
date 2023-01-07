@@ -44,8 +44,7 @@ public class TextManager : NetworkBehaviour
     }
     public void CreatePopUp(Vector3 position, int amount,Color color)
     {
-     
-        Debug.Log("inside creating pop up");
+        
         if (_textPrefab == null)
         {
             _textPrefab = Resources.Load<GameObject>("Text/textPrefab");

@@ -87,6 +87,7 @@ namespace Matchplay.Shared
     [Serializable]
     public class UserData
     {
+        public string matchMakingId;
         public string userName; //name of the player
         public string userAuthId; //Auth Player ID
         public ulong networkId;
@@ -107,6 +108,7 @@ namespace Matchplay.Shared
             sb.AppendLine($"- User Name:             {userName}");
             sb.AppendLine($"- User Auth Id:          {userAuthId}");
             sb.AppendLine($"- User Game Preferences: {userGamePreferences}");
+            sb.AppendLine($"- Match making Id:       {matchMakingId} ");
             return sb.ToString();
         }
     }

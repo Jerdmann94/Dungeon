@@ -1,3 +1,4 @@
+
 using System;
 using System.Threading.Tasks;
 using Matchplay.Client;
@@ -5,16 +6,18 @@ using Matchplay.Server;
 using Matchplay.Shared;
 using Pathfinding;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
-    public class ApplicationController : MonoBehaviour
+public class JacobBootStrapper: MonoBehaviour
     {
         //Manager instances to be instantiated.
         [SerializeField]
         ServerSingleton m_ServerPrefab;
+        
+
         [SerializeField]
         ClientSingleton m_ClientPrefab;
-
         ApplicationData m_AppData;
         public static bool IsServer;
 
@@ -68,14 +71,13 @@ using UnityEngine;
             }
             else
             {
-                var clientSingleton = Instantiate(m_ClientPrefab);
-                clientSingleton.CreateClient(profileName);
-
-                //We want to load the main menu while the client is still initializing.
-                clientSingleton.Manager.ToMainMenu();
+                
+                //var clientSingleton = Instantiate(m_ClientPrefab);
+                //clientSingleton.CreateClient(profileName);
+               //NEED TO INITIALIZE MY CLIENT HERE
+               SceneManager.LoadScene("mainMenu", LoadSceneMode.Single);
             }
         }
 
         
     }
-

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7046415580021203162}
   - component: {fileID: -6351237946503469990}
   - component: {fileID: 7873556355499935702}
+  - component: {fileID: 4337500240277323909}
   m_Layer: 0
   m_Name: BootStrapper
   m_TagString: Untagged
@@ -60,3 +61,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ServerPrefab: {fileID: 8170483120423582781, guid: 5d840e73f05f8d8468f93776fe44a4ff, type: 3}
   m_ClientPrefab: {fileID: -679559761290629862, guid: 0810fe259d4cf244e9deaa151cb9bc80, type: 3}
+--- !u!114 &4337500240277323909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3994187357937379283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba5b5dffa96b99498e31a48a39b1ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

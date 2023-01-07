@@ -40,8 +40,11 @@ namespace Matchplay.Server
         /// </summary>
         public async Task<MatchmakingResults> SubscribeAndAwaitMatchmakerAllocation()
         {
+            Debug.Log(m_MultiplayService + " multiplayService, this should not be null");
+            Debug.Log(" multplayservice instance, this might not be null" + MultiplayService.Instance );
             if (m_MultiplayService == null)
                 return null;
+            Debug.Log(" multiplayService is not null");
             m_AllocationId = null;
             m_Servercallbacks = new MultiplayEventCallbacks();
             m_Servercallbacks.Allocate += OnMultiplayAllocation;

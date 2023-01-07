@@ -8,17 +8,19 @@ using Matchplay.Shared.Tools;
 using Unity.Netcode;
 using Random = UnityEngine.Random;
 using Unity.Services.Matchmaker.Models;
+using Unity.Services.Multiplay;
 
 namespace Matchplay.Server
 {
     public class ServerGameManager : IDisposable
     {
+        private int playersInGame = 0;
         public bool StartedServices => m_StartedServices;
         public MatchplayNetworkServer NetworkServer => m_NetworkServer;
         public SynchedServerData ServerData => m_SynchedServerData;
 
         MatchplayNetworkServer m_NetworkServer;
-        MatchplayBackfiller m_Backfiller;
+        //MatchplayBackfiller m_Backfiller;
         string connectionString => $"{m_ServerIP}:{m_ServerPort}";
         string m_ServerIP = "0.0.0.0";
         int m_ServerPort = 7777;
@@ -45,11 +47,14 @@ namespace Matchplay.Server
         public async Task StartGameServerAsync(GameInfo startingGameInfo)
         {
             Debug.Log($"Starting server with:{startingGameInfo}.");
-
+            Debug.Log($"network server" +  m_NetworkServer);
+            
+            m_NetworkServer.OnPlayerJoined += UserJoinedServer;
+            m_NetworkServer.OnPlayerLeft += UserLeft;
             try
             {
                 var matchmakerPayload = await GetMatchmakerPayload(k_MultiplayServiceTimeout);
-
+                Debug.Log( matchmakerPayload + " matchmaker payload");
                 if (matchmakerPayload != null)
                 {
                     Debug.Log($"Got payload: {matchmakerPayload}");
@@ -57,7 +62,9 @@ namespace Matchplay.Server
 
                     await StartAllocationService(startingGameInfo,
                         (ushort)matchmakerPayload.MatchProperties.Players.Count);
-                    await StartBackfill(matchmakerPayload, startingGameInfo);
+                    //await StartBackfill(matchmakerPayload, startingGameInfo);
+                    Debug.Log(m_NetworkServer + " MatchplaynetworkServer");
+                    
                     m_NetworkServer.OnPlayerJoined += UserJoinedServer;
                     m_NetworkServer.OnPlayerLeft += UserLeft;
                     m_StartedServices = true;
@@ -94,15 +101,17 @@ namespace Matchplay.Server
 
         async Task<MatchmakingResults> GetMatchmakerPayload(int timeout)
         {
+           
             if (m_MultiplayAllocationService == null)
                 return null;
 
             //Try to get the matchmaker allocation payload from the multiplay services, and init the services if we do.
             var matchmakerPayloadTask = m_MultiplayAllocationService.SubscribeAndAwaitMatchmakerAllocation();
-
+            
             //If we don't get the payload by the timeout, we stop trying.
             if (await Task.WhenAny(matchmakerPayloadTask, Task.Delay(timeout)) == matchmakerPayloadTask)
             {
+                Debug.Log(matchmakerPayloadTask.Result+ " MatchmakerpayloadTask result");
                 return matchmakerPayloadTask.Result;
             }
 
@@ -123,7 +132,7 @@ namespace Matchplay.Server
             m_MultiplayAllocationService.SetMode(startingGameInfo.gameMode.ToString());
         }
 
-        async Task StartBackfill(MatchmakingResults payload, GameInfo startingGameInfo)
+        /*async Task StartBackfill(MatchmakingResults payload, GameInfo startingGameInfo)
         {
             m_Backfiller = new MatchplayBackfiller(connectionString, payload.QueueName, payload.MatchProperties,
                 startingGameInfo.MaxUsers);
@@ -132,7 +141,7 @@ namespace Matchplay.Server
             {
                 await m_Backfiller.BeginBackfilling();
             }
-        }
+        }*/
 
         #region ServerSynching
 
@@ -154,23 +163,25 @@ namespace Matchplay.Server
         void UserJoinedServer(UserData joinedUser)
         {
             Debug.Log($"{joinedUser} joined the game");
-            m_Backfiller.AddPlayerToMatch(joinedUser);
+            playersInGame++;
+           // m_Backfiller.AddPlayerToMatch(joinedUser);
             m_MultiplayAllocationService.AddPlayer();
-            if (!m_Backfiller.NeedsPlayers() && m_Backfiller.Backfilling)
+            /*if (!m_Backfiller.NeedsPlayers() && m_Backfiller.Backfilling)
             {
 #pragma warning disable 4014
                 m_Backfiller.StopBackfill();
 #pragma warning restore 4014
-            }
+            }*/
         }
 
         void UserLeft(UserData leftUser)
         {
-            var playerCount = m_Backfiller.RemovePlayerFromMatch(leftUser.userAuthId);
+            //var playerCount = m_Backfiller.RemovePlayerFromMatch(leftUser.userAuthId);
             m_MultiplayAllocationService.RemovePlayer();
-
-            Debug.Log($"player '{leftUser?.userName}' left the game, {playerCount} players left in game.");
-            if (playerCount <= 0)
+            playersInGame--;
+            
+            Debug.Log($"player '{leftUser?.userName}' left the game, {playersInGame} players left in game.");
+            if (playersInGame <= 0)
             {
 #pragma warning disable 4014
                 CloseServer();
@@ -178,12 +189,12 @@ namespace Matchplay.Server
                 return;
             }
 
-            if (m_Backfiller.NeedsPlayers() && !m_Backfiller.Backfilling)
+            /*if (m_Backfiller.NeedsPlayers() && !m_Backfiller.Backfilling)
             {
 #pragma warning disable 4014
                 m_Backfiller.BeginBackfilling();
 #pragma warning restore 4014
-            }
+            }*/
         }
 
         #endregion
@@ -208,10 +219,10 @@ namespace Matchplay.Server
             return new GameInfo { map = chosenMap, gameMode = chosenMode, gameQueue = queue };
         }
 
-        async Task CloseServer()
+         void CloseServer()
         {
             Debug.Log($"Closing Server");
-            await m_Backfiller.StopBackfill();
+            //wait m_Backfiller.StopBackfill();
             Dispose();
             Application.Quit();
         }
@@ -221,7 +232,15 @@ namespace Matchplay.Server
             if (!m_StartedServices)
             {
                 if (m_NetworkServer.OnPlayerJoined != null) m_NetworkServer.OnPlayerJoined -= UserJoinedServer;
+                else
+                {
+                    Debug.Log("matchplayServer is null,on join callback not added, THIS NEEDS TO BE FIXED");
+                }
                 if (m_NetworkServer.OnPlayerLeft != null) m_NetworkServer.OnPlayerLeft -= UserLeft;
+                else
+                {
+                    Debug.Log("matchplayServer is null,on LEAVE callback not added, THIS NEEDS TO BE FIXED");
+                }
             }
 
             if (m_SynchedServerData != null)
@@ -232,7 +251,7 @@ namespace Matchplay.Server
                     m_SynchedServerData.gameMode.OnValueChanged -= OnServerChangedMode;
             }
 
-            m_Backfiller?.Dispose();
+            //m_Backfiller?.Dispose();
             m_MultiplayAllocationService?.Dispose();
             NetworkServer?.Dispose();
         }

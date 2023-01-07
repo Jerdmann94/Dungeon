@@ -1,15 +1,20 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Matchplay.Client;
 using Matchplay.Server;
 using Matchplay.Shared;
 using Matchplay.Shared.Tools;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
+using Unity.Services.Lobbies;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Player = Unity.Services.Matchmaker.Models.Player;
 
-namespace Matchplay.Client
-{
+
+
     /// <summary>
     /// Connecting manager of all the components that make a client work
     /// </summary>
@@ -27,9 +32,9 @@ namespace Matchplay.Client
         public ClientGameManager(string profileName = "default")
         {
             User = new MatchplayUser();
-            Debug.Log($"Beginning with new Profile:{profileName}");
+            //Debug.Log($"Beginning with new Profile:{profileName}");
             ProfileName = profileName;
-
+            
             //We can load the mainMenu while the client initializes
 #pragma warning disable 4014
 
@@ -56,7 +61,7 @@ namespace Matchplay.Client
                 User.AuthId = AuthenticationWrapper.PlayerID();
             else
                 User.AuthId = Guid.NewGuid().ToString();
-            Debug.Log($"did Auth?{authenticationResult} {User.AuthId}");
+            //Debug.Log($"did Auth?{authenticationResult} {User.AuthId}");
             Initialized = true;
         }
 
@@ -71,17 +76,8 @@ namespace Matchplay.Client
             NetworkClient.DisconnectClient();
         }
 
-        public async Task MatchmakeAsync(Action<MatchmakerPollingResult> onMatchmakerResponse = null)
-        {
-            if (Matchmaker.IsMatchmaking)
-            {
-                Debug.LogWarning("Already matchmaking, please wait or cancel.");
-                return;
-            }
-
-            var matchResult = await GetMatchAsync();
-            onMatchmakerResponse?.Invoke(matchResult);
-        }
+       
+        
 
         public async Task CancelMatchmaking()
         {
@@ -118,13 +114,44 @@ namespace Matchplay.Client
             User.QueuePreference = queue;
         }
 
-        async Task<MatchmakerPollingResult> GetMatchAsync()
+        public async Task<MatchmakerPollingResult> GetMatchAsync()
         {
             Debug.Log($"Beginning Matchmaking with {User}");
             var matchmakingResult = await Matchmaker.Matchmake(User.Data);
 
             if (matchmakingResult.result == MatchmakerPollingResult.Success)
                 BeginConnection(matchmakingResult.ip, matchmakingResult.port);
+            
+
+            else
+                Debug.LogWarning($"{matchmakingResult.result} : {matchmakingResult.resultMessage}");
+
+            return matchmakingResult.result;
+        }
+        public async Task<MatchmakerPollingResult> GetMatchAsync(Lobby lobby)
+        {
+            Debug.Log($"Beginning Matchmaking with {User}");
+            var matchmakingResult = await Matchmaker.Matchmake(lobby);
+
+            if (matchmakingResult.result == MatchmakerPollingResult.Success)
+            {
+                BeginConnection(matchmakingResult.ip, matchmakingResult.port);
+                await LobbyService.Instance.UpdateLobbyAsync(lobby.Id, new UpdateLobbyOptions
+                {
+                    Data = new Dictionary<string, DataObject>
+                    {
+                        
+                        {
+                            "Ip", new DataObject(DataObject.VisibilityOptions.Member,matchmakingResult.ip)
+                        },
+                        {
+                            "Port", new DataObject(DataObject.VisibilityOptions.Member,matchmakingResult.port.ToString())
+                        } 
+                    }
+                    
+                });
+            }
+               
             else
                 Debug.LogWarning($"{matchmakingResult.result} : {matchmakingResult.resultMessage}");
 
@@ -142,5 +169,6 @@ namespace Matchplay.Client
             Dispose();
             Application.Quit();
         }
+
+        
     }
-}
