@@ -852,6 +852,7 @@ MonoBehaviour:
   inventoryManager: {fileID: 0}
   attackPanelManager: {fileID: 0}
   textManager: {fileID: 11400000, guid: 56a07be6150fd9245a5c41e229703e38, type: 2}
+  closeTreasureUI: {fileID: 11400000, guid: f38fc1e97e7390f478ff65a5c46fe303, type: 2}
 --- !u!114 &5617411282462506145
 MonoBehaviour:
   m_ObjectHideFlags: 0

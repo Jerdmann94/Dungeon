@@ -13,10 +13,7 @@ public class DropOnMeChest : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        GameObject dropped = eventData.pointerDrag;
-        DragAndDropLoot dragAndDropLoot = dropped.GetComponent<DragAndDropLoot>();
-        dragAndDropLoot.SetParentTransform(this.gameObject.transform);
-        treasureScript.AddItemToChestServerRpc(dragAndDropLoot.item);
+        
         
     }
 }

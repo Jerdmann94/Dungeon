@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "Coin",menuName = "Coin")]
+[CreateAssetMenu(fileName = "coin",menuName = "Loot/Coins/Copper")]
 public class Coin : LootData
 {
     public int value;

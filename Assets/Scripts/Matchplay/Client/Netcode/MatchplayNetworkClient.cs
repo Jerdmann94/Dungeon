@@ -50,9 +50,14 @@ namespace Matchplay.Client
 
         public void DisconnectClient()
         {
+            Debug.Log("CLIENT DISCONNECT");
             DisconnectReason.SetDisconnectReason(ConnectStatus.UserRequestedDisconnect);
+            
+            
             NetworkShutdown();
         }
+
+        
 
         /// <summary>
         /// Sends some additional data to the server about the client and begins connecting them.
@@ -136,6 +141,8 @@ namespace Matchplay.Client
                 return;
             NetworkShutdown();
         }
+        
+        
 
         void NetworkShutdown()
         {

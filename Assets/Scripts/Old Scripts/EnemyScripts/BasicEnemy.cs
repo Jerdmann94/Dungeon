@@ -8,12 +8,15 @@ public class BasicEnemy : NetworkBehaviour
 {
     public Slider healthSlider;
     public int maxHealth;
-    public GameObject treasurePrefab;
+    
     private NetworkVariable<int> currentHealth = new NetworkVariable<int>();
     [SerializeField] private AIDestinationSetter setter;
     private BasicEnemyMelee basicEnemyMelee;
 
     public StaticReference textManager;
+
+    public GameTreasureSpawnEvent gameTreasureSpawnEvent;
+    [SerializeField] private LootTable lootTable; 
     private void Awake()
     {
         healthSlider.maxValue = maxHealth;
@@ -60,7 +63,7 @@ public class BasicEnemy : NetworkBehaviour
     {
         if (other.CompareTag("EnemyAwake") && !gameObject.CompareTag("TestDummy"))
         {
-            Debug.Log("Exit Trigger Detected");
+            //Debug.Log("Exit Trigger Detected");
             if (setter.target == other.gameObject.transform)
             {
                 setter.target = null;
@@ -97,8 +100,12 @@ public class BasicEnemy : NetworkBehaviour
     private void SpawnTreasureObject()
     {
         var position = transform.position;
+        var pos = new Vector3(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y), Mathf.RoundToInt(position.z));
+        gameTreasureSpawnEvent.TriggerEvent(pos,lootTable);
+        
+        /*var position = transform.position;
         var pos = new Vector3(position.x, position.y, position.z);
         var treasure = Instantiate(treasurePrefab, position, Quaternion.identity);
-        treasure.GetComponent<NetworkObject>().Spawn();
+        treasure.GetComponent<NetworkObject>().Spawn();*/
     }
 }

@@ -1,17 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class BasicRune : GameItem
 {
     public int damage;
-    public BasicRune(RuneData lootData)
+    public BasicRune(RuneData lootData) : base(lootData.spritePath,lootData.maxSpawnAmount, 
+            Random.Range(1, lootData.maxSpawnAmount),
+            lootData.name,
+            OnDropType.AttackPanel)
     {
-        amountInThisStack = Random.Range(1, lootData.maxSpawnAmount);
-        sprite = lootData.sprite;
-        maxStackAmount = lootData.stackAmount;
-        name = lootData.name;
         damage = lootData.attackData.damage;
-
     }
+    
 }

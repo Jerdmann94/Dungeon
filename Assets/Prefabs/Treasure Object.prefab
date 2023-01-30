@@ -147,6 +147,8 @@ MonoBehaviour:
   treasureInventoryManager: {fileID: 0}
   treasureOC: {fileID: 11400000, guid: 35886bcc960bb8742ba6ee8fa1e274d5, type: 2}
   inventoryOC: {fileID: 11400000, guid: 927769391374ec84a8ae9f7da5c085ec, type: 2}
+  listContainer: {fileID: 11400000, guid: d393ab8b92a37f9489350274489aef27, type: 2}
+  image: {fileID: 5865821367263767251}
 --- !u!114 &608206653726804131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,3 +162,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lootTable: {fileID: 11400000, guid: b7bd4314c3658e248ba5006423952b87, type: 2}
+  listContainer: {fileID: 11400000, guid: d393ab8b92a37f9489350274489aef27, type: 2}
+  id: 

@@ -165,7 +165,8 @@ namespace Matchplay.Server
             Debug.Log($"{joinedUser} joined the game");
             playersInGame++;
            // m_Backfiller.AddPlayerToMatch(joinedUser);
-            m_MultiplayAllocationService.AddPlayer();
+           //Debug.Log(m_MultiplayAllocationService);
+            //m_MultiplayAllocationService.AddPlayer();
             /*if (!m_Backfiller.NeedsPlayers() && m_Backfiller.Backfilling)
             {
 #pragma warning disable 4014
@@ -177,7 +178,7 @@ namespace Matchplay.Server
         void UserLeft(UserData leftUser)
         {
             //var playerCount = m_Backfiller.RemovePlayerFromMatch(leftUser.userAuthId);
-            m_MultiplayAllocationService.RemovePlayer();
+            //m_MultiplayAllocationService.RemovePlayer();
             playersInGame--;
             
             Debug.Log($"player '{leftUser?.userName}' left the game, {playersInGame} players left in game.");
@@ -219,7 +220,7 @@ namespace Matchplay.Server
             return new GameInfo { map = chosenMap, gameMode = chosenMode, gameQueue = queue };
         }
 
-         void CloseServer()
+        public void CloseServer()
         {
             Debug.Log($"Closing Server");
             //wait m_Backfiller.StopBackfill();

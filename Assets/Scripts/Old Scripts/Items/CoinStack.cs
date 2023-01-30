@@ -7,11 +7,11 @@ using UnityEngine.SocialPlatforms;
 public class CoinStack : GameItem
 {
    
-    public CoinStack(LootData lootData)
+    public CoinStack(LootData lootData) : base(lootData.spritePath,lootData.maxSpawnAmount, 
+        Random.Range(1, lootData.maxSpawnAmount),
+        lootData.name,
+        OnDropType.Inventory)
     {
-        amountInThisStack = Random.Range(1, lootData.maxSpawnAmount);
-        sprite = lootData.sprite;
-        maxStackAmount = lootData.stackAmount;
-        name = lootData.name;
+        
     }
 }

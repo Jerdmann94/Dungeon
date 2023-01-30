@@ -1,5 +1,8 @@
+using System;
 using DG.Tweening;
+using Matchplay.Client;
 using MyBox;
+using Unity.Collections;
 using Unity.Mathematics;
 using Unity.Netcode;
 using UnityEngine;
@@ -29,7 +32,18 @@ public class PlayerController : NetworkBehaviour
         public StaticReference textManager;
         
         private Camera mainCam;
-        
+        //EVENTS
+
+        [SerializeField] private GameEvent closeTreasureUI;
+        // PSEUDO INVENTORY LIST FOR NETWORK
+
+        public NetworkList<FixedString512Bytes> equipJson;
+
+        private void Awake()
+        {
+            equipJson = new NetworkList<FixedString512Bytes>();
+        }
+
         public override void OnNetworkSpawn()
         {
             inventoryManager = GameObject.FindWithTag("InventoryManager").GetComponent<InventoryManager>();
@@ -43,8 +57,9 @@ public class PlayerController : NetworkBehaviour
             mainCam = Camera.main;
             
             MovePlayerToSpawnServerRpc();
-            
 
+            equipJson ??= new NetworkList<FixedString512Bytes>();
+            equipJson.OnListChanged += inventoryManager.UpdateInventoryDelegate;
         }
         
         
@@ -59,12 +74,15 @@ public class PlayerController : NetworkBehaviour
             
             var spawnerPod = playerSpawnPointList.spawnPods[rand];
             transform.position = spawnerPod.transform.GetChild(0).transform.position;
+            transform.rotation = Quaternion.identity;
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         }
 
         void Update()
         {
             if (IsServer)
             {
+               
                 foreach (var client in NetworkManager.ConnectedClients.Values)
                 {
                     var pc = client.PlayerObject.GetComponent<PlayerController>();
@@ -84,7 +102,8 @@ public class PlayerController : NetworkBehaviour
             //-----------------------------CHECK FOR DEATH -------------------------
             if (health.Value <=0)
             {
-                DeathServerRpc();
+                ClientSingleton.Instance.Manager.Disconnect();
+                //DeathServerRpc();
             }
             // -------------  CAMERA STUFF --------------------------
             var position = transform.position;
@@ -169,8 +188,30 @@ public class PlayerController : NetworkBehaviour
             
             position = new Vector3(newPosition.x + position.x, newPosition.y+
                                                                position.y, 0);
-            client.PlayerObject.GetComponent<PlayerController>().moveCoolDown.Value+=moveSpeed;
+            var pc = client.PlayerObject.GetComponent<PlayerController>();
+            pc.moveCoolDown.Value+=moveSpeed;
             client.PlayerObject.transform.DOMove(position, moveSpeed*.5f);
+            //CHECK IF NEW POSITION IS OUTSIDE OF THE REACH OF THE CHEST YOU ARE IN
+            if (inventoryManager.listContainer.ReturnTreasureScript() == null)
+            {
+                Debug.Log("no treasure script in list container");
+                return;
+            }
+            if (PositionCheckUtility.PosCheck(position,
+                    pc.inventoryManager.listContainer.lastTreasureScript.gameObject.transform.position,
+                    1.1f)) return;
+            ClientRpcParams clientRpcParams = new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new ulong[]{client.ClientId}
+                }
+            };
+            
+            CloseTreasureClientRpc(clientRpcParams);
+
+
+
             //transform1.position = position;
 
         }
@@ -252,6 +293,19 @@ public class PlayerController : NetworkBehaviour
             client.PlayerObject.GetComponent<PlayerController>().HealthChangeServerRpc(100);
 
         }
+        //CLIENT SIDE STUFF
         
         
+        [ClientRpc]
+        public void SendItemClientRpc(string itemJson,ClientRpcParams clientRpcParams = default)
+        {
+            GameItem item = JsonUtility.FromJson<GameItem>(itemJson);
+            Debug.Log(item);
+        }
+        [ClientRpc]
+        public void CloseTreasureClientRpc(ClientRpcParams clientRpcParams = default)
+        {
+            Debug.Log("emitting close treasure event");
+            closeTreasureUI.TriggerEvent();
+        }
     }

@@ -247,9 +247,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 37377553668494303}
   maxHealth: 50
-  treasurePrefab: {fileID: 5865821367263767249, guid: 1db50d1b8f6ad86408d2e646fa17fa21, type: 3}
   setter: {fileID: 37377553102992244}
   textManager: {fileID: 11400000, guid: 56a07be6150fd9245a5c41e229703e38, type: 2}
+  gameTreasureSpawnEvent: {fileID: 11400000, guid: a599544bbfb400e4698e36c7ef5b46d7, type: 2}
+  lootTable: {fileID: 11400000, guid: b7bd4314c3658e248ba5006423952b87, type: 2}
 --- !u!114 &-7425640313433818284
 MonoBehaviour:
   m_ObjectHideFlags: 0

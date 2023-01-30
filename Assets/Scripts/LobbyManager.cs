@@ -63,7 +63,8 @@ public class LobbyManager : MonoBehaviour
                 var ip = hostLobby.Data["Ip"].Value;
                 int port = int.Parse(hostLobby.Data["Port"].Value);
                 ClientSingleton.Instance.Manager.BeginConnection(ip, port);
-
+                hostLobby.Data.Remove("Ip");
+                hostLobby.Data.Remove("Port");
             }
         }
         if (currentLobbyManager.panelCount == hostLobby.Players.Count) return;
@@ -191,6 +192,15 @@ public class LobbyManager : MonoBehaviour
     {
         try
         {
+            if (hostLobby != null)
+            {
+                if (hostLobby.Players.Find(player => player.Id == AuthenticationService.Instance.PlayerId ) != null)
+                {
+                    Debug.Log("We are already in a lobby and we should not create a new one," +
+                              " hopefully this only happens when we return from a game finished game");
+                    return;
+                }
+            }
             CreateLobbyOptions createLobbyOptions = new CreateLobbyOptions
             {
                 IsPrivate = false,

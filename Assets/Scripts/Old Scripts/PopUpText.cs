@@ -41,7 +41,7 @@ public class PopUpText : NetworkBehaviour
     {
         test.Value = amount;
         textMeshPro.text = test.Value.ToString();
-        Debug.Log(test.Value);
+        //Debug.Log(test.Value);
 
     }
 

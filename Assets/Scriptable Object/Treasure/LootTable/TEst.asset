@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: TEst
   m_EditorClassIdentifier: 
   loot:
-  - {fileID: 11400000, guid: 0303c3c0da2630e4dbb9433874ecfa64, type: 2}
-  - {fileID: 11400000, guid: 0303c3c0da2630e4dbb9433874ecfa64, type: 2}
-  - {fileID: 11400000, guid: 0303c3c0da2630e4dbb9433874ecfa64, type: 2}
+  - {fileID: 11400000, guid: 2dedb8be873ad024cad3e5fda95a2926, type: 2}
+  - {fileID: 11400000, guid: c0f73619cb57f0b46a6e2555809bcb84, type: 2}
+  - {fileID: 11400000, guid: 626fb37177bb3d44581fad544c3dc1e5, type: 2}

@@ -16,14 +16,13 @@ public class DragAndDropLoot : MonoBehaviour, IPointerDownHandler, IBeginDragHan
 
     public GameItem item;
 
-    public OnDropType currentLocation;
-
     public StaticReference inventoryOC;
     public StaticReference treasureOC;
 
-    public void OnMouseOver()
+    public OnDropType preDragLocation;
+    /*public void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(1) && !Input.GetKey(KeyCode.LeftShift) && item.lootType == LootType.Rune)
+        if (Input.GetMouseButtonDown(1) && !Input.GetKey(KeyCode.LeftShift) && item.onDropType == OnDropType.AttackPanel)
         {
             MoveToAttackPanel();
         }
@@ -38,9 +37,9 @@ public class DragAndDropLoot : MonoBehaviour, IPointerDownHandler, IBeginDragHan
                 MoveItemToTreasure();
                 return;
         }
-    }
+    }*/
 
-    private void MoveToAttackPanel()
+    /*private void MoveToAttackPanel()
     {
         throw new NotImplementedException();
     }
@@ -50,7 +49,7 @@ public class DragAndDropLoot : MonoBehaviour, IPointerDownHandler, IBeginDragHan
         treasureOC.GetComponent<DropOnMe>().treasureScript.AddItemToChestServerRpc(item);
         inventoryOC.target.transform.parent.parent.parent
             .GetComponent<InventoryManager>().RemoveItemFromInventoryServerRpc(item);
-        SetParentTransform(treasureOC.target.transform);
+        SetParentTransform(treasureOC.target.transform, OnDropType.Treasure);
         currentLocation = OnDropType.Treasure;
     }
 
@@ -59,10 +58,10 @@ public class DragAndDropLoot : MonoBehaviour, IPointerDownHandler, IBeginDragHan
         treasureOC.GetComponent<DropOnMe>().treasureScript.RemoveItemFromChestServerRpc(item);
         inventoryOC.target.transform.parent.parent.parent
             .GetComponent<InventoryManager>().AddItemToInventoryServerRpc(item);
-        SetParentTransform(inventoryOC.target.transform);
+        SetParentTransform(inventoryOC.target.transform, OnDropType.Inventory);
         currentLocation = OnDropType.Inventory;
         
-    }
+    }*/
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -106,9 +105,10 @@ public class DragAndDropLoot : MonoBehaviour, IPointerDownHandler, IBeginDragHan
     }
 
     
-    public void SetParentTransform(Transform ptransform)
+    public void SetParentTransform(Transform ptransform, OnDropType location)
     {
         gameObject.transform.SetParent(ptransform);
+        preDragLocation = location;
     }
 
     

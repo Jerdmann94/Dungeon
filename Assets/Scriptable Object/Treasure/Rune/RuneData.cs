@@ -6,4 +6,8 @@ using UnityEngine;
 public class RuneData : LootData
 {
     public AttackData attackData;
+    public override object MakeGameContainer()
+    {
+        throw new System.NotImplementedException();
+    }
 }

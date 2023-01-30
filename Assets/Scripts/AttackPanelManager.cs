@@ -29,7 +29,8 @@ public class AttackPanelManager : MonoBehaviour
         {
             var ui =Instantiate(attackSlotUI, transform);
             ui.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = item.amountInThisStack.ToString();
-            ui.transform.GetChild(1).GetComponent<Image>().sprite = item.sprite;
+           // ui.transform.GetChild(1).GetComponent<Image>().sprite = item.sprite;
+           //HAVE TO SET SPRITES THROUGH SPRITE STRINGS
             ui.GetComponent<DragDropAttackItem>().currentRune = item;
 
 

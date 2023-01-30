@@ -44,6 +44,7 @@ public class MatchmakingManager : MonoBehaviour
 
     async void Start()
     {
+        Debug.Log("Start of Scene ");
         //SetUpMatchMaker();
         var clientSingleton = Instantiate(m_ClientPrefab);
         clientSingleton.CreateClient("Default");
@@ -99,7 +100,7 @@ public class MatchmakingManager : MonoBehaviour
 
     public async void PlayButtonPressed()
     {
-        Debug.Log(m_LocalLaunchMode);
+        
         if (m_LocalLaunchMode)
         {
             if (int.TryParse(m_LocalPort, out var localIntPort))
