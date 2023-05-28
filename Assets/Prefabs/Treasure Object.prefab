@@ -117,7 +117,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.008505717, y: -0.11057463}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -145,8 +145,6 @@ MonoBehaviour:
   uiElement: {fileID: 0}
   treasureScript: {fileID: 608206653726804131}
   treasureInventoryManager: {fileID: 0}
-  treasureOC: {fileID: 11400000, guid: 35886bcc960bb8742ba6ee8fa1e274d5, type: 2}
-  inventoryOC: {fileID: 11400000, guid: 927769391374ec84a8ae9f7da5c085ec, type: 2}
   listContainer: {fileID: 11400000, guid: d393ab8b92a37f9489350274489aef27, type: 2}
   image: {fileID: 5865821367263767251}
 --- !u!114 &608206653726804131
@@ -161,6 +159,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 340bad9ac1def074ba348525d4335b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lootTable: {fileID: 11400000, guid: b7bd4314c3658e248ba5006423952b87, type: 2}
   listContainer: {fileID: 11400000, guid: d393ab8b92a37f9489350274489aef27, type: 2}
   id: 

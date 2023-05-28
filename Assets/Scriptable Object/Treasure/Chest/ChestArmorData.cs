@@ -7,10 +7,11 @@ using UnityEngine;
 public class ChestArmorData : LootData
 {
     public int defense;
+    public DamageType damageType;
     
     
-    public override object MakeGameContainer()
+    public override GameItem MakeGameContainer()
     {
-        return new ChestGameItem(this,defense);
+        return new ChestGameItem(this,defense,damageType);
     }
 }

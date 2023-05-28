@@ -18,4 +18,5 @@ MonoBehaviour:
   id: 
   spritePath: Shield
   useableLocation: 7
-  defense: 0
+  defense: 3
+  damageType: 0

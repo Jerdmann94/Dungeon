@@ -7,9 +7,7 @@ using Random = UnityEngine.Random;
 
 public abstract class LootData : ScriptableObject
 {
-    [SerializeField]private int chanceIn100;
-
- 
+    [SerializeField] private int chanceIn100;
     
     public int stackAmount;
 
@@ -18,6 +16,7 @@ public abstract class LootData : ScriptableObject
     public string id;
     public string spritePath;
     public OnDropType useableLocation;
+
     public bool RollOnTable()
     {
         return (Random.Range(1, 101) < chanceIn100);
@@ -28,6 +27,6 @@ public abstract class LootData : ScriptableObject
         return null;
     }*/
 
-    public abstract object MakeGameContainer();
+    public abstract GameItem MakeGameContainer();
 
 }

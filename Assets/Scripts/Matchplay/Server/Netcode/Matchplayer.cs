@@ -17,8 +17,10 @@ namespace Matchplay.Server
         public NetworkVariable<Color> PlayerColor = new NetworkVariable<Color>();
         [HideInInspector]
         public NetworkVariable<NetworkString> PlayerName = new NetworkVariable<NetworkString>();
+
         [SerializeField]
         //RendererColorer m_ColorSwitcher;
+        public UserData userData;
 
         public override void OnNetworkSpawn()
         {

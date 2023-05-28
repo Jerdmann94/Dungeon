@@ -6,8 +6,9 @@ using UnityEngine;
 public class BootData : LootData
 {
     public int defense;
-    public override object MakeGameContainer()
+    public DamageType damageType;
+    public override GameItem MakeGameContainer()
     {
-        return new BootGameItem(this, defense);
+        return new BootGameItem(this, defense,damageType);
     }
 }

@@ -72,7 +72,17 @@ namespace Matchplay.Shared
             get => Data.userGamePreferences.gameQueue;
             set => Data.userGamePreferences.gameQueue = value;
         }
-
+        public string InventoryItems
+        {
+            get => Data.userGamePreferences.inventoryItems;
+            set => Data.userGamePreferences.inventoryItems = value;
+        }
+        
+        public string Equipment
+        {
+            get => Data.userGamePreferences.equipment;
+            set => Data.userGamePreferences.equipment = value;
+        }
         public override string ToString()
         {
             var userData = new StringBuilder("MatchplayUser: ");
@@ -136,6 +146,9 @@ namespace Matchplay.Shared
             { k_MultiplayCompetetiveQueue, GameQueue.Competitive }
         };
 
+        public string inventoryItems;
+        public string equipment;
+
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
@@ -143,6 +156,8 @@ namespace Matchplay.Shared
             sb.AppendLine($"- map:        {map}");
             sb.AppendLine($"- gameMode:   {gameMode}");
             sb.AppendLine($"- gameQueue:  {gameQueue}");
+            sb.AppendLine($"- Inventory:  {inventoryItems}");
+            sb.AppendLine($"- Equipment:  {equipment}");
             return sb.ToString();
         }
 

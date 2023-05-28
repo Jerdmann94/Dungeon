@@ -74,12 +74,19 @@ namespace Tessera
     public class TesseraGenerator : MonoBehaviour
     {
 
+        //USED BY OTHER SCRIPTS TO CHECK WHICH TILES ARE IN WHAT PLACES
+
+        public Array[][] tilesArray;
+        
+        
 
         [SerializeField]
         [Tooltip("The size of the generator area, counting in cells.")]
         private Vector3Int m_size = new Vector3Int(10, 1, 10);
 
 
+        
+        
         /// <summary>
         /// The size of the generator area, counting in cells each of size <see cref="tileSize"/>.
         /// </summary>
@@ -886,7 +893,8 @@ namespace Tessera
         /// <returns>The game objects created.</returns>
         public static GameObject[] Instantiate(TesseraTileInstance instance, Transform parent)
         {
-            return Instantiate(instance, parent, instance.Tile.gameObject, instance.Tile.instantiateChildrenOnly);
+            var x = Instantiate(instance, parent, instance.Tile.gameObject, instance.Tile.instantiateChildrenOnly);
+            return x;
         }
 
         /// <summary>

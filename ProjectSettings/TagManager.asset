@@ -16,6 +16,9 @@ TagManager:
   - TreasurePanelObjectCollection
   - InventoryManager
   - AttackManager
+  - SpawnPoint
+  - Ui
+  - StatPanel
   layers:
   - Default
   - TransparentFX
@@ -28,7 +31,7 @@ TagManager:
   - Attacks
   - EnemyAwake
   - Treasure
-  - 
+  - Teleporter
   - 
   - 
   - 

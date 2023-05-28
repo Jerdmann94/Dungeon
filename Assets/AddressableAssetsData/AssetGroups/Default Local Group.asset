@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 214f080144e0d314a9b1ee630197a6b9
+  m_SerializeEntries:
+  - m_GUID: f1ec4da94f3fce84887017bd602a7b98
+    m_Address: Sprites/Currency/Coin.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: dbe6f37e950b2db4599be80d656b8985
+    m_Address: Sprites/Currency/Shield.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 51e90e2f352d93d49b72bebce22d5c10
+    m_Address: Sprites/Currency/Sword.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 5853304b983d1ec418d901953a1a35cc, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: c9537631a19ba2a49ae3cc350ce1479e, type: 2}
+    - {fileID: 11400000, guid: 399acacbaee00b94099ad9bc42bcccfd, type: 2}

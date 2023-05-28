@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8526707824746661578}
   - component: {fileID: 5273142411547106314}
   - component: {fileID: 8770530353789362117}
-  - component: {fileID: 5626728077342834064}
+  - component: {fileID: 139171432919332894}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Wall
@@ -223,7 +223,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
---- !u!114 &5626728077342834064
+--- !u!114 &139171432919332894
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

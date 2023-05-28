@@ -5,8 +5,9 @@ using UnityEngine;
 public class LegData : LootData
 {
     public int defense;
-    public override object MakeGameContainer()
+    public DamageType damageType;
+    public override GameItem MakeGameContainer()
     {
-        return new LegGameItem(this,defense);
+        return new LegGameItem(this,defense,damageType);
     }
 }

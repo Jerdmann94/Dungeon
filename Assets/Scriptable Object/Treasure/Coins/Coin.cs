@@ -8,7 +8,7 @@ public class Coin : LootData
 {
     public int value;
 
-    public override object MakeGameContainer()
+    public override GameItem MakeGameContainer()
     {
         return new CoinStack(this);
     }

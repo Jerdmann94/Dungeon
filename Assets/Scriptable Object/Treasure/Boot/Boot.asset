@@ -18,4 +18,5 @@ MonoBehaviour:
   id: 
   spritePath: Apple
   useableLocation: 6
-  defense: 0
+  defense: 1
+  damageType: 0

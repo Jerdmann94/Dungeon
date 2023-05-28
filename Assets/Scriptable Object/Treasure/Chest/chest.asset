@@ -18,4 +18,5 @@ MonoBehaviour:
   id: 
   spritePath: Chest
   useableLocation: 4
-  defense: 0
+  defense: 2
+  damageType: 0

@@ -6,9 +6,15 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "coin",menuName = "Loot/Hands/Right/RightHandItem")]
 public class RightHandData : LootData
 {
-    public int defense;
-    public override object MakeGameContainer()
+    
+    public int lowAttack;
+    public int highAttack;
+    public DamageType damageType;
+    public override GameItem MakeGameContainer()
     {
-        return new RightHandGameItem(this, defense);
+  
+        return new RightHandGameItem(this, lowAttack,highAttack, damageType);
     }
+
+    
 }

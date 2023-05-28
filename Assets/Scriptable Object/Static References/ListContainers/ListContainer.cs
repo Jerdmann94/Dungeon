@@ -10,10 +10,13 @@ public class ListContainer : ScriptableObject
     public List<GameItem> itemsInServer = new List<GameItem>();
     public List<DropOnMe> clientCollectionsThatNeedTreasureScript;
     public TreasureScript lastTreasureScript;
-
+    public Dictionary<string, BasicEnemy> enemyLookUp = new ();
+    public Dictionary<string, PlayerController> playerLookUp = new();
 
     public void Init()
     {
+        enemyLookUp = new();
+        playerLookUp = new();
         treasureScripts = new List<TreasureScript>();
         itemsInServer = new List<GameItem>();
     }
@@ -29,7 +32,7 @@ public class ListContainer : ScriptableObject
     public TreasureScript FindTreasure(string id)
     {
         
-        Debug.Log("ID used to find treasure = " + id);
+        //Debug.Log("ID used to find treasure = " + id);
         TreasureScript treasure = null;
 
         treasure = treasureScripts.Find(script => script.id == id
@@ -77,4 +80,6 @@ public class ListContainer : ScriptableObject
 
         return ts;
     }
+
+   
 }

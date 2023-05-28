@@ -4,10 +4,10 @@ using UnityEngine;[CreateAssetMenu(menuName = "Loot/Helmets/Crown")]
 public class HelmetData : LootData
 {
     public int defense;
+    public DamageType damageType;
     
-    
-    public override object MakeGameContainer()
+    public override GameItem MakeGameContainer()
     {
-        return new HelmetGameItem(this,defense);
+        return new HelmetGameItem(this,defense, damageType);
     }
 }

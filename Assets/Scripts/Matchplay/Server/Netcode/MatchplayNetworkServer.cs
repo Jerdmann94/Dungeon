@@ -26,7 +26,7 @@ namespace Matchplay.Server
         NetworkManager m_NetworkManager;
 
         //Used in ApprovalCheck. This is intended as a bit of light protection against DOS attacks that rely on sending silly big buffers of garbage.
-        const int k_MaxConnectPayload = 1024;
+        const int k_MaxConnectPayload = 3000;
 
         /// <summary>
         /// map a given client guid to the data for a given client player.
@@ -118,15 +118,17 @@ namespace Matchplay.Server
         /// </summary>
         /// <param name="request">Wrapper for data payload and network/client id.</param>
         /// <param name="response">Data for approval status and any optional player object spawn information to be returned.</param>
+        
         void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
         {
             Debug.Log("INSIDE APPROVAL CHECK");
             if (request.Payload.Length > k_MaxConnectPayload)
             {
+                var spawnPoint = GameObject.FindWithTag("SpawnPoint");
                 //Set response data
                 response.Approved = false;
                 response.CreatePlayerObject = false;
-                response.Position = null;
+                response.Position = spawnPoint.transform.position;
                 response.Rotation = null;
                 response.Pending = false;
 
@@ -161,7 +163,7 @@ namespace Matchplay.Server
             //Set response data
             response.Approved = true;
             response.CreatePlayerObject = true;
-            response.Position = Vector3.zero;
+            response.Position = Vector3.zero;  // THIS IS SPAWNING THE PLAYER POSITION. USE THIS LATER
             response.Rotation = Quaternion.identity;
             response.Pending = false;
 
@@ -169,7 +171,7 @@ namespace Matchplay.Server
             //Run an async 'fire and forget' task to setup the player network object data when it is intiialized, uses main thread context.
             var scheduler = TaskScheduler.FromCurrentSynchronizationContext();
             Task.Factory.StartNew(
-                async () => await SetupPlayerPrefab(request.ClientNetworkId, userData.userName), 
+                async () => await SetupPlayerPrefab(request.ClientNetworkId, userData.userName,userData), 
                 System.Threading.CancellationToken.None, 
                 TaskCreationOptions.None, scheduler
             );
@@ -198,7 +200,7 @@ namespace Matchplay.Server
             OnServerPlayerDespawned?.Invoke(matchPlayerInstance);
         }
 
-        async Task SetupPlayerPrefab(ulong networkId, string playerName)
+        async Task SetupPlayerPrefab(ulong networkId, string playerName, UserData userData)
         {
             NetworkObject playerNetworkObject;
 
@@ -214,6 +216,7 @@ namespace Matchplay.Server
             var networkedMatchPlayer = GetNetworkedMatchPlayer(networkId);
             networkedMatchPlayer.PlayerName.Value = playerName;
             networkedMatchPlayer.PlayerColor.Value = Customization.IDToColor(networkId);
+            networkedMatchPlayer.userData = userData;
 
             OnServerPlayerSpawned?.Invoke(networkedMatchPlayer);
         }

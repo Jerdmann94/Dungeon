@@ -6,8 +6,9 @@ using UnityEngine;
 public class LeftHandData : LootData
 {
     public int defense;
-    public override object MakeGameContainer()
+    public DamageType damageType;
+    public override GameItem MakeGameContainer()
     {
-        return new LeftHandGameItem(this, defense);
+        return new LeftHandGameItem(this, defense,damageType);
     }
 }

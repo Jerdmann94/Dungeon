@@ -162,9 +162,9 @@ namespace Matchplay.Server
 
         void UserJoinedServer(UserData joinedUser)
         {
-            Debug.Log($"{joinedUser} joined the game");
+            
             playersInGame++;
-           // m_Backfiller.AddPlayerToMatch(joinedUser);
+            // m_Backfiller.AddPlayerToMatch(joinedUser);
            //Debug.Log(m_MultiplayAllocationService);
             //m_MultiplayAllocationService.AddPlayer();
             /*if (!m_Backfiller.NeedsPlayers() && m_Backfiller.Backfilling)
