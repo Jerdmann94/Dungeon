@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -12,7 +13,7 @@ public class DragAndDropStore : MonoBehaviour, IPointerDownHandler, IBeginDragHa
 
     public Image childImage;
     public ItemCustomData data;
-    public OnDropTypeStore preDragLocation;
+    public OnDropType preDragLocation;
     public GameItem item;
     public string econInventoryId;
 
@@ -50,8 +51,15 @@ public class DragAndDropStore : MonoBehaviour, IPointerDownHandler, IBeginDragHa
     }
 
 
-    public void SetParentTransform(Transform ptransform, OnDropTypeStore location)
+    private void OnDestroy()
     {
+        image.raycastTarget = false;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+    }
+
+    public void SetParentTransform(Transform ptransform, OnDropType location)
+    {
+        Debug.Log("setting parent for ui at :" +location + transform);
         gameObject.transform.SetParent(ptransform);
         preDragLocation = location;
     }
@@ -63,6 +71,7 @@ public class DragAndDropStore : MonoBehaviour, IPointerDownHandler, IBeginDragHa
 
     public void SetUpItem(GameItem i)
     {
+        transform.GetChild(0).GetComponent<Image>().color = ToolTipManager.GetRarityColor(i.rarity);
         item = i;
     }
 }

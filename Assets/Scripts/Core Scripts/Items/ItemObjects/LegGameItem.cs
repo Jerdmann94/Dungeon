@@ -1,5 +1,7 @@
+using System;
 using Newtonsoft.Json;
 
+[Serializable]
 public class LegGameItem : GameItem
 {
     public DamageType damageType;
@@ -11,7 +13,7 @@ public class LegGameItem : GameItem
     }
 
     public LegGameItem(LootData lootData, int d, DamageType damageType) : base(lootData.spritePath,
-        lootData.maxSpawnAmount, lootData.stackAmount, lootData.name, OnDropType.LegSlot)
+       1, lootData.name, OnDropType.LegSlot, lootData.value)
     {
         this.damageType = damageType;
         defense = d;

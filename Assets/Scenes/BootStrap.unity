@@ -156,7 +156,6 @@ MonoBehaviour:
   m_ProtocolType: 0
   m_MaxPacketQueueSize: 3000
   m_MaxPayloadSize: 6144
-  m_MaxSendQueueSize: 1200000
   m_HeartbeatTimeoutMS: 500
   m_ConnectTimeoutMS: 1000
   m_MaxConnectAttempts: 20
@@ -164,7 +163,7 @@ MonoBehaviour:
   ConnectionData:
     Address: 127.0.0.1
     Port: 7777
-    ServerListenAddress: 
+    ServerListenAddress: 127.0.0.1
   DebugSimulator:
     PacketDelayMS: 0
     PacketJitterMS: 0
@@ -187,37 +186,9 @@ MonoBehaviour:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 179067916}
     PlayerPrefab: {fileID: 8992607145767829367, guid: c23c8cac9b34b4346965756bc82baa9a, type: 3}
-    NetworkPrefabs:
-    - Override: 0
-      Prefab: {fileID: 4270651088175170981, guid: be2c6740c0d8fe448a1a0e4739fe9637, type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
-      Prefab: {fileID: 2526977335854532175, guid: 6685afc8e649cc84398479db715d1f00, type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
-      Prefab: {fileID: 37377553102992242, guid: cd14b46a98eec72409e7f002a372b61d, type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
-      Prefab: {fileID: 5865821367263767249, guid: 1db50d1b8f6ad86408d2e646fa17fa21, type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
-      Prefab: {fileID: 6743040243714849546, guid: bc8b9382ac5d2f04e9d1a3957a50176b, type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
-      Prefab: {fileID: 914568783297530497, guid: 7585349b68148b3478fd5bbc246b209f, type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
+    Prefabs:
+      NetworkPrefabsLists:
+      - {fileID: 11400000, guid: 097424a4fa68e274b9db845bdd07ce19, type: 2}
     TickRate: 60
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 1
@@ -233,6 +204,7 @@ MonoBehaviour:
     LoadSceneTimeOut: 30
     SpawnTimeout: 1
     EnableNetworkLogs: 1
+    OldPrefabList: []
 --- !u!4 &179067918
 Transform:
   m_ObjectHideFlags: 0

@@ -1,18 +1,13 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class AttackScript : MonoBehaviour
 {
-    public AttackData attackData;
     public int damage;
     public List<GameObject> hitList = new();
-    public GameObject losSpawn;
 
-    private void Start()
-    {
-        damage = attackData.damage;
-    }
-
+    public NetworkObject obj;
     public void CheckForLos()
     {
         var transform1 = transform;
@@ -28,7 +23,14 @@ public class AttackScript : MonoBehaviour
             //Instantiate(losSpawn, position, Quaternion.identity);
             //Debug.Log(hit.collider.gameObject.name+ "   " + distF);
             gameObject.SetActive(false);
-        else
-            Debug.Log(" raycast did not hit");
+        //else
+            //Debug.Log(" raycast did not hit");
+    }
+
+    public void Init(int dam)
+    {
+        damage = dam;
+        obj.Spawn();
+        Destroy(this.gameObject, 1f);
     }
 }

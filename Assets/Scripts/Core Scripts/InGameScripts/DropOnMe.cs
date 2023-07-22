@@ -30,13 +30,17 @@ public class DropOnMe : NetworkBehaviour, IDropHandler
         var dragAndDropLoot = dropped.GetComponent<DragAndDropLoot>();
 
         if (treasureScript == null)
-            //Debug.Log(dragAndDropLoot.item + "  and my drop type " + myDropType+" PredragLocation is" + dragAndDropLoot.preDragLocation);
+        {
+        //    Debug.Log(dragAndDropLoot.item + "  and my drop type " + myDropType+" PredragLocation is" + dragAndDropLoot.preDragLocation);
             MoveItemServerRpc(dragAndDropLoot.item.id, myDropType, dragAndDropLoot.preDragLocation, "");
-        //dragAndDropLoot.SetParentTransform(this.gameObject.transform, myDropType);
+
+        }
         else
-            //Debug.Log(dragAndDropLoot.item + "  and my drop type " + myDropType+" " + dragAndDropLoot.preDragLocation+" " + treasureScript.id);
+        {
+//            Debug.Log(dragAndDropLoot.item + "  and my drop type " + myDropType+" " + dragAndDropLoot.preDragLocation+" " + treasureScript.id);
             MoveItemServerRpc(dragAndDropLoot.item.id, myDropType, dragAndDropLoot.preDragLocation, treasureScript.id);
-        //dragAndDropLoot.SetParentTransform(this.gameObject.transform, myDropType);
+
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -46,13 +50,13 @@ public class DropOnMe : NetworkBehaviour, IDropHandler
         string chestId,
         ServerRpcParams serverRpcParams = default)
     {
-        Debug.Log(serverRpcParams);
+       Debug.Log("Inside move item server rpc");
         var clientId = serverRpcParams.Receive.SenderClientId;
         if (!NetworkManager.ConnectedClients.ContainsKey(clientId)) return;
         var client = NetworkManager.ConnectedClients[clientId];
         var i = listContainer.FindItem(itemID);
         Debug.Log("This should be found item " + i);
-        var inventoryManager = inventoryOc.target.transform.parent.parent.parent.GetComponent<InventoryManager>();
+        var inventoryManager = inventoryOc.Target.GetComponent<ReferenceToInventoryManager>().inventoryManager;
         inventoryManager.MoveItem(dropLocation, i, preDragLocation, chestId, client);
     }
 
@@ -84,7 +88,7 @@ public class DropOnMe : NetworkBehaviour, IDropHandler
             return;
         }
 
-        Debug.Log("UI Destroying here " + type + "   " + toDestroy);
+//        Debug.Log("UI Destroying here " + type + "   " + toDestroy);
         Destroy(toDestroy);
     }
 }
@@ -100,5 +104,9 @@ public enum OnDropType
     BootSlot,
     LeftHandSlot,
     RightHandSlot,
-    Nulling
+    RingSlot,
+    AmuletSlot,
+    Nulling,
+    Selling,
+    Stash
 }

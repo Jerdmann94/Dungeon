@@ -1,10 +1,16 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core_Scripts.UtilityScripts;
+using MyBox;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Unity.Collections;
 using Unity.Services.Economy;
 using UnityEngine;
+using static UnityEngine.JsonUtility;
 
 public class LootChangerUtil : MonoBehaviour
 {
@@ -26,8 +32,13 @@ public class LootChangerUtil : MonoBehaviour
         string itemInventoryItemId)
     {
         bool needInstanceData = instanceData == null;
+        
+        //THIS LINE IS IMPORTANT
+        //THIS NAME HAS TO MATCH DASHBOARD CONFIGURATION NAME FOR THIS ITEM
+        Debug.Log(cdata.name);
         var item = lootDatas.Find(data => data.name == cdata.name);
-        var container = item.MakeGameContainer();
+        Debug.Log(item.name);
+        var container = item.MakeGameContainer(1);
         container.id = itemInventoryItemId;
         //IF THIS IS A NEW ITEM, MAKE INSTANCE DATA
         if (needInstanceData)
@@ -42,8 +53,9 @@ public class LootChangerUtil : MonoBehaviour
             container.modBlocks = instanceData.modBlocks;
             GetAttackForItem(container, instanceData);
         }
-
-        container.sellID = "SELL" + item.name.ToUpper();
+        var replace =  item.name.ToUpper().Replace(' ', '_');
+        replace = replace.Replace("'", "_");
+        container.sellID = "SELL" + replace;
 
         return container;
     }
@@ -82,9 +94,13 @@ public class LootChangerUtil : MonoBehaviour
 
     public static GameItem JsonToItem(string json)
     {
+        if (json.IsNullOrEmpty())
+        {
+            return null;
+        }
         var t = JObject.Parse(json)["allowablePosition"].ToObject<OnDropType>();
         GameItem g = null;
-        //Debug.Log(t);
+        Debug.Log(t);
 
         switch (t)
         {
@@ -105,6 +121,7 @@ public class LootChangerUtil : MonoBehaviour
                 break;
             case OnDropType.LegSlot:
                 g = JsonConvert.DeserializeObject<LegGameItem>(json);
+                //Debug.Log(g + " " + g.modBlocks[0].text);
                 break;
             case OnDropType.LeftHandSlot:
                 g = JsonConvert.DeserializeObject<LeftHandGameItem>(json);
@@ -112,6 +129,22 @@ public class LootChangerUtil : MonoBehaviour
             case OnDropType.RightHandSlot:
                 g = JsonConvert.DeserializeObject<RightHandGameItem>(json);
                 break;
+            case OnDropType.AmuletSlot:
+                g = JsonConvert.DeserializeObject<AmuletGameItem>(json);
+                break;
+            case OnDropType.RingSlot:
+                g = JsonConvert.DeserializeObject<RingGameItem>(json);
+                break;
+            case OnDropType.AttackPanel:
+                break;
+            case OnDropType.Nulling:
+                break;
+            case OnDropType.Selling:
+                break;
+            case OnDropType.Stash:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
 
         return g;
@@ -154,6 +187,28 @@ public class LootChangerUtil : MonoBehaviour
                 instanceData.Add("defense", lh.defense);
                 instanceData.Add("damageType", lh.damageType);
                 break;
+            case OnDropType.AmuletSlot:
+                instanceData.Add("damageType", DamageType.Physical);
+                break;
+            case OnDropType.RingSlot:
+                instanceData.Add("damageType", DamageType.Physical);
+                break;
+            case OnDropType.Treasure:
+                instanceData.Add("damageType", DamageType.Physical);
+                break;
+            case OnDropType.Inventory:
+                instanceData.Add("damageType", DamageType.Physical);
+                break;
+            case OnDropType.AttackPanel:
+                break;
+            case OnDropType.Nulling:
+                break;
+            case OnDropType.Selling:
+                break;
+            case OnDropType.Stash:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
 
         return instanceData;
@@ -175,8 +230,58 @@ public class LootChangerUtil : MonoBehaviour
                 return (LegGameItem)gameItem;
             case OnDropType.LeftHandSlot:
                 return (LeftHandGameItem)gameItem;
+            case OnDropType.AmuletSlot:
+                return (AmuletGameItem)gameItem;
+            case OnDropType.RingSlot:
+                return (RingGameItem)gameItem;
         }
         Debug.Log("This should not be printing, item is supposed to return a real item");
         return null;
+    }
+
+    public static Dictionary<OnDropType, GameItem> ConvertJsonToEquipment(string equipmentJson)
+    {
+        var equipment = EquipmentUtil.InitEquip();
+        var dropList = EquipmentUtil.InitEquip();
+       
+        
+        foreach (var dropType in dropList)
+        {
+            
+            var jobj = JObject.Parse(equipmentJson);
+            if (jobj.ContainsKey(dropType.Key.ToString()))
+            {
+                var i = JsonToItem(jobj[dropType.Key.ToString()]?.ToString());
+                equipment[dropType.Key] = i;
+            }
+        }
+//        Debug.Log(" equipment json "+equipmentJson);
+        return equipment;
+    }
+    
+
+
+    public static FixedString512Bytes ItemToJson(GameItem item)
+    {
+        switch (item.allowablePosition)
+        {
+            case OnDropType.RightHandSlot:
+                return ToJson((RightHandGameItem)item);
+            case OnDropType.BootSlot:
+                return ToJson((BootGameItem)item);
+            case OnDropType.ChestSlot:
+                return ToJson((ChestGameItem)item);
+            case OnDropType.HeadSlot:
+                return ToJson((HelmetGameItem)item);
+            case OnDropType.LegSlot:
+                return ToJson((LegGameItem)item);
+            case OnDropType.LeftHandSlot:
+                return ToJson((LeftHandGameItem)item);
+            case OnDropType.AmuletSlot:
+                return ToJson((AmuletGameItem)item);
+            case OnDropType.RingSlot:
+                return ToJson((RingGameItem)item);
+        }
+        return ToJson(item);
     }
 }

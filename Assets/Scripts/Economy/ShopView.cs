@@ -35,7 +35,7 @@ public class ShopView : MonoBehaviour
     }
     public void SetInteractable(bool isInteractable = true)
     {
-        inventoryButton.interactable = isInteractable;
+        //inventoryButton.interactable = isInteractable;
         gainCurrencyDebugButton.interactable = isInteractable;
     }
     public void Initialize(Dictionary<string, ShopCategory> virtualShopCategories)
@@ -76,7 +76,7 @@ public class ShopView : MonoBehaviour
                 itemsContainer.transform);
             
             //virtualShopItemGameObject.GetComponent<DragAndDropStore>().item;
-                Debug.Log(virtualShopItem);
+//                Debug.Log(virtualShopItem);
             virtualShopItemGameObject.GetComponent<ShopItemView>().Initialize(
                 virtualShopSceneManager, virtualShopItem);
         }

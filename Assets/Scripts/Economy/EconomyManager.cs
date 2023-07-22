@@ -35,6 +35,7 @@ public class EconomyManager : MonoBehaviour
             {
                 instance = this;
             }
+            //RefreshButton();
         }
 
         void OnDestroy()
@@ -92,7 +93,11 @@ public class EconomyManager : MonoBehaviour
                 return;
 
             //Debug.Log(balanceResult.Balances[0]);
-            await RefreshInventory();
+            
+            // REMOVING THIS FOR NOW, NEED TO DO THIS SO WHEN YOU BUY SOMETHING
+            //IT WONT RESET ALL OF YOUR EQUIPMENT
+            // AND IT WILL MAKE IT FASTER TO NOT HAVE TO REFRESH EACH TIME YOU MAKE A PURCHASE
+            //await RefreshInventory();
             currencyHudView.SetBalances(balanceResult);
         }
 
@@ -111,7 +116,7 @@ public class EconomyManager : MonoBehaviour
             GetInventoryResult inventoryResult = null;
 
             // empty the inventory view first
-            inventoryHudView.Refresh(default);
+            inventoryHudView.FullRefresh(default);
 
             try
             {
@@ -130,7 +135,8 @@ public class EconomyManager : MonoBehaviour
             if (this == null)
                 return;
            
-            inventoryHudView.Refresh(inventoryResult.PlayersInventoryItems);
+            inventoryHudView.FullRefresh(inventoryResult.PlayersInventoryItems);
+            await RefreshCurrencyBalances();
         }
 
         static Task<GetInventoryResult> GetEconomyPlayerInventory()

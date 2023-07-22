@@ -16,19 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 214f080144e0d314a9b1ee630197a6b9
-  m_SerializeEntries:
-  - m_GUID: f1ec4da94f3fce84887017bd602a7b98
-    m_Address: Sprites/Currency/Coin.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: dbe6f37e950b2db4599be80d656b8985
-    m_Address: Sprites/Currency/Shield.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 51e90e2f352d93d49b72bebce22d5c10
-    m_Address: Sprites/Currency/Sword.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5853304b983d1ec418d901953a1a35cc, type: 2}
   m_SchemaSet:

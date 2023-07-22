@@ -10,8 +10,8 @@ public class BootGameItem : GameItem
     {
     }
 
-    public BootGameItem(LootData lootData, int d, DamageType damageType) : base(lootData.spritePath,
-        lootData.maxSpawnAmount, lootData.stackAmount, lootData.name, OnDropType.BootSlot)
+    public BootGameItem(LootData lootData, int d, DamageType damageType) : base(lootData.spritePath,d
+        , lootData.name, OnDropType.BootSlot, lootData.value)
     {
         this.damageType = damageType;
         defense = d;

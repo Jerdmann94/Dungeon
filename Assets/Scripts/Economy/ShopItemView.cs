@@ -17,10 +17,7 @@ public class ShopItemView : MonoBehaviour,IPointerEnterHandler, IPointerExitHand
         {
             m_VirtualShopSceneManager = virtualShopSceneManager;
             m_VirtualShopItem = virtualShopItem;
-
-            var spr = Resources.Load<Sprite>(virtualShopItem.spriteString);
-            Debug.Log(spr);
-            GetComponent<Image>().sprite = spr;
+            GetComponent<Image>().sprite = SpriteUtil.GetSprite(virtualShopItem.spriteString);
 
             var cost = virtualShopItem.costs[0];
             

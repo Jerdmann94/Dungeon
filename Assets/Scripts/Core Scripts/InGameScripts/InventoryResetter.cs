@@ -31,7 +31,7 @@ public class InventoryResetter : MonoBehaviour
 
             var gi = items[index];
             go.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = gi.amountInThisStack.ToString();
-            go.transform.GetChild(1).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + gi.sprite);
+            go.transform.GetChild(1).GetComponent<Image>().sprite = SpriteUtil.GetSprite(gi.sprite);
             //DOING SPRITES SOME OTHER WAY, WITH STRINGS TO FIND THEM
             dd.item = gi;
             dd.SetParentTransform(transform, myType);
@@ -40,15 +40,15 @@ public class InventoryResetter : MonoBehaviour
         children = transform.GetComponentsInChildren<DragAndDropLoot>();
         if (children.Length <= items.Count) return;
         for (var i = 0; i < items.Count; i++)
-            children[i].SetParentTransform(uiDump.target.transform, OnDropType.Nulling);
+            children[i].SetParentTransform(uiDump.Target.transform, OnDropType.Nulling);
     }
 
     private GameObject SpawnUIITem()
     {
         GameObject go = null;
-        go = uiDump.target.transform.childCount == 0
+        go = uiDump.Target.transform.childCount == 0
             ? Instantiate(uiPrefab)
-            : uiDump.target.transform.GetChild(0).gameObject;
+            : uiDump.Target.transform.GetChild(0).gameObject;
         return go;
     }
 }

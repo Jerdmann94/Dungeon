@@ -2,12 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Services.Authentication;
-using Unity.Services.Core;
+
 using Unity.Services.Economy;
 using Unity.Services.Economy.Model;
-using Unity.Services.Samples.VirtualShop;
-using Unity.VisualScripting.Dependencies.Sqlite;
+
+
+
 using UnityEngine;
 
 public class ShopSceneManager : MonoBehaviour
@@ -15,7 +15,7 @@ public class ShopSceneManager : MonoBehaviour
         const int k_EconomyPurchaseCostsNotMetStatusCode = 10504;
 
         public ShopView virtualShopSampleView;
-
+        public InventoryHudView inventoryHudView;
         
         public async Task InitShop()
         {
@@ -44,7 +44,7 @@ public class ShopSceneManager : MonoBehaviour
                     RemoteConfigManager.instance.FetchConfigs(),
                     EconomyManager.instance.RefreshCurrencyBalances());*/
                 await Task.WhenAll(RemoteConfigManager.instance.FetchConfigs(),
-                    EconomyManager.instance.RefreshCurrencyBalances());
+                    EconomyManager.instance.RefreshCurrencyBalances(),EconomyManager.instance.RefreshInventory());
                 if (this == null) return;
 
                 // Read all badge addressables
@@ -95,12 +95,34 @@ public class ShopSceneManager : MonoBehaviour
         {
             try
             {
+                Debug.Log(virtualShopItem.id);
                 var result = await EconomyManager.instance.MakeVirtualPurchaseAsync(virtualShopItem.id);
                 if (this == null) return;
 
                 await EconomyManager.instance.RefreshCurrencyBalances();
                 if (this == null) return;
+
                 
+                Debug.Log(result.Rewards.Inventory[0].Id);
+                Debug.Log(result.Rewards.Inventory[0].PlayersInventoryItemIds[0]);
+                GetInventoryOptions options = new GetInventoryOptions
+                {
+                    ItemsPerFetch = 1,
+                    PlayersInventoryItemIds = new List<string>() { result.Rewards.Inventory[0].PlayersInventoryItemIds[0] }
+                };
+                GetInventoryResult inventoryResult = await EconomyService.Instance.PlayerInventory.GetInventoryAsync(options);
+
+                List<PlayersInventoryItem> listOfItems = inventoryResult.PlayersInventoryItems;
+
+                if (listOfItems.Count < 1)
+                {
+                    Debug.Log("purchased succeded but didnt get it from shop");
+                    return;
+                }
+                var item = listOfItems[0];
+
+                inventoryHudView.MakeItemUI(item);
+                inventoryHudView.RefreshItemsInInventory();
                 foreach(var cost in result.Costs.Currency)
                 {
                     Debug.Log(cost);

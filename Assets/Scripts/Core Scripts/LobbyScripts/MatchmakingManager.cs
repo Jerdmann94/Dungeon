@@ -31,9 +31,9 @@ public class MatchmakingManager : MonoBehaviour
     private string m_LocalPort;
 
 
-    private async void Start()
+    private async void OnEnable()
     {
-        Debug.Log("Start of Scene ");
+//        Debug.Log("Start of Scene ");
         //SetUpMatchMaker();
         var clientSingleton = Instantiate(m_ClientPrefab);
         clientSingleton.CreateClient("Default");

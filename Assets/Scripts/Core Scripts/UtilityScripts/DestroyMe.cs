@@ -2,9 +2,18 @@ using Unity.Netcode;
 
 public class DestroyMe : NetworkBehaviour
 {
+    public float destoryTimer = 10f;
     private void Awake()
     {
-        Destroy(this, 10f);
+        if (destoryTimer > 1f)
+        {
+            Destroy(this.gameObject,10f);
+        }
+        else
+        {
+            Destroy(this.gameObject, destoryTimer);
+        }
+        
     }
 
     public void DestroyThis()

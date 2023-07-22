@@ -11,7 +11,7 @@ public class HelmetGameItem : GameItem
     }
 
     public HelmetGameItem(LootData lootData, int d, DamageType damageType) : base(lootData.spritePath,
-        lootData.maxSpawnAmount, lootData.stackAmount, lootData.name, OnDropType.HeadSlot)
+        1, lootData.name, OnDropType.HeadSlot, lootData.value)
     {
         this.damageType = damageType;
         defense = d;

@@ -11,7 +11,7 @@ public class LeftHandGameItem : GameItem
     }
 
     public LeftHandGameItem(LootData lootData, int d, DamageType damageType) : base(lootData.spritePath,
-        lootData.maxSpawnAmount, lootData.stackAmount, lootData.name, OnDropType.LeftHandSlot)
+        1, lootData.name, OnDropType.LeftHandSlot,lootData.value)
     {
         this.damageType = damageType;
         defense = d;

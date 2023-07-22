@@ -8,9 +8,10 @@ public class AttackManager : NetworkBehaviour
     public GameObject attackObjectPrefab;
     public StaticReference managerReference;
 
+
     private void Start()
     {
-        managerReference.target = gameObject;
+        managerReference.Target = gameObject;
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -24,6 +25,7 @@ public class AttackManager : NetworkBehaviour
         var pc = client.PlayerObject.GetComponent<PlayerController>();
         var gameItem = pc.attackPanelManager.runesInAttackPanel.Find(item => item.name == runeName);
 
+//        Debug.Log("Rune was item " + gameItem);
         if (gameItem == null)
             return;
 
@@ -34,18 +36,38 @@ public class AttackManager : NetworkBehaviour
         var distance = worldPosition - cPos;
         var direction = distance / distance.magnitude;
 
-        //Debug.Log("raycasting");
+
         var distF = Vector3.Distance(new Vector3(worldPosition.x, worldPosition.y, 0), cPos);
         var hit = Physics2D.Raycast(cPos, direction, distF, 1);
         if (hit)
-            //Debug.Log(hit.collider.gameObject);
             return;
-        //Debug.Log("we hit not a wall");
+      
+        //Get attack object prefrab from item
+        var prefab = gameItem.attackPrefab;
+        //ROLL DAMAGE FOR OBJECT
+        var damage = RollDamage(pc.statBlock,gameItem.rangeLowDamage,gameItem.rangeHighDamage, gameItem.damageType);
         // SPAWN AN ATTACK OBJECT
-
         var spawnLoc = new Vector3Int(Mathf.RoundToInt(worldPosition.x), Mathf.RoundToInt(worldPosition.y), 1);
-        var attackObject = Instantiate(attackObjectPrefab, spawnLoc,
+        var attackObject = Instantiate(prefab, spawnLoc,
             quaternion.identity);
+
+        //CHECK WHAT KIND OF SCRIPT IS ATTATCHED TO OBJECT
+        var attackScript = attackObject.GetComponent<AttackScript>();
+        if ( attackScript != null)
+        {
+            attackObject.GetComponent<AttackScript>().damage = damage;
+            
+        }
+        else if (attackObject.GetComponent<AoeParent>() != null)
+        {
+            attackObject.GetComponent<AoeParent>().SetChildDamage(damage);
+        }
+        
         attackObject.GetComponent<NetworkObject>().Spawn();
+    }
+
+    private int RollDamage(PlayerStatBlock ps, int rangeLow, int rangeHigh, DamageType gameItemDamageType)
+    {
+        return ps.RollDamage(rangeLow, rangeHigh,gameItemDamageType);
     }
 }

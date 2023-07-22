@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc58eaaf3d09ea944806fe8c90b011c5, type: 3}
+  m_Name: Universal Troll LTable
+  m_EditorClassIdentifier: 
+  loot:
+  - {fileID: 11400000, guid: 0303c3c0da2630e4dbb9433874ecfa64, type: 2}
+  - {fileID: 11400000, guid: 5cbf9c68f6f58eb4ab2c618ae1ca458e, type: 2}
+  - {fileID: 11400000, guid: ebb5743f0d3d5e1469c78a0b559e828f, type: 2}
+  - {fileID: 11400000, guid: 52e195764f1f52742a191e93af59ff5f, type: 2}
+  - {fileID: 11400000, guid: 935e1641657c05843a55785c9c2b172e, type: 2}
+  - {fileID: 11400000, guid: e91a8d1ecce691b408e8eb9e9b68f22e, type: 2}
+  - {fileID: 11400000, guid: 6ddb3617fddac7f488caa544dc5d0123, type: 2}
+  - {fileID: 11400000, guid: 99e61b87686f1934abd853c948285e47, type: 2}
+  - {fileID: 11400000, guid: 2fbe19110e0649a4081a5f33de82f317, type: 2}
+  - {fileID: 11400000, guid: ce4a66455ed90e141b2193f132379f32, type: 2}
+  - {fileID: 11400000, guid: ce4a66455ed90e141b2193f132379f32, type: 2}
+  - {fileID: 11400000, guid: 3185439eea3027b4fb930b674e6e8247, type: 2}
+  - {fileID: 11400000, guid: f2255376946f08b4f823a4938e3788a1, type: 2}
+  - {fileID: 11400000, guid: 92d77a9dbf2555f40b48dee3883663c8, type: 2}
+  spawnChanceIn1000: 7a0300000a000000140000001e0000003c000000500000000a00000001000000370000008a020000c8000000580200006400000032000000
+  maxAmountSpawnable: 5a00000001000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000

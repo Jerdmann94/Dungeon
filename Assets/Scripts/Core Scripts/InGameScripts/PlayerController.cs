@@ -41,6 +41,7 @@ public class PlayerController : NetworkBehaviour
 
 
     private Camera mainCam;
+    public float fogDamageTimer = 2f;
    
 
     private void Awake()
@@ -51,27 +52,50 @@ public class PlayerController : NetworkBehaviour
 
     private void Update()
     {
+        // -------------  CAMERA STUFF --------------------------
+        var position = transform.position;
+        if (mainCam == null) mainCam = Camera.main;
+        mainCam!.transform.position = new Vector3(position.x, position.y, -10);
+        if (!GameMaster.gameStartStatic)
+        {
+            return;
+        }
+        //-----------------------------SERVER STUFF
         if (IsServer)
+        {
             foreach (var client in NetworkManager.ConnectedClients.Values)
             {
                 var pc = client.PlayerObject.GetComponent<PlayerController>();
                 pc.statBlock.UpdateMoveCooldown();
 
                 if (pc.digCoolDown.Value > 0) pc.digCoolDown.Value -= Time.deltaTime;
-            }
+                if (pc.fogDamageTimer > 0) pc.fogDamageTimer -= Time.deltaTime;
+                if (!DeathFogManager.CheckFogSafety(pc.transform.position)&& pc.fogDamageTimer <= 0)
+                {
+                    pc.HealthChangeFromServer(10);
+                    pc.fogDamageTimer = 2f;
+                }
+
+                
+            } 
+        }
+            
+        
 
         if (!IsOwner)
             return;
         //-----------------------------CHECK FOR DEATH -------------------------
             //DISABLING DEATH CHECK DURING OTHER TESTING
+
+            if (statBlock.currentHealth.Value <= 0)
+            {
+                ClientSingleton.Instance.Manager.Disconnect();
+                //DeathServerRpc();
+            }
+            
         
-        //if (statBlock.currentHealth.Value <= 0)
-            //ClientSingleton.Instance.Manager.Disconnect();
-        //DeathServerRpc();
-        // -------------  CAMERA STUFF --------------------------
-        var position = transform.position;
-        if (mainCam == null) mainCam = Camera.main;
-        mainCam!.transform.position = new Vector3(position.x, position.y, -10);
+       
+        
 
         // CHECK FOR DESTRUCTION 
         if (Input.GetKey(KeyCode.F) && digCoolDown.Value <= 0)
@@ -99,16 +123,20 @@ public class PlayerController : NetworkBehaviour
     {
         if (IsClient)
             return;
-        if (!collision.gameObject.CompareTag("Attack"))
-            return;
+     //   Debug.Log(collision.gameObject.name);
+//        Debug.Log(collision.gameObject.tag);
+        if (collision.gameObject.CompareTag("Attack") || collision.gameObject.CompareTag("EnemyAttack"))
+        {
 
-        var attackScript = collision.gameObject.GetComponent<AttackScript>();
-        if (attackScript.hitList.Contains(gameObject)) return;
-        attackScript.hitList.Add(gameObject);
+            var attackScript = collision.gameObject.GetComponent<AttackScript>();
+            if (attackScript.hitList.Contains(gameObject)) return;
+            attackScript.hitList.Add(gameObject);
 
-        textManager.target.GetComponent<TextManager>().CreatePopUp(transform.position, attackScript.damage, Color.red);
-        HealthChangeServerRpc(-attackScript.damage);
-        healthSlider.value = statBlock.currentHealth.Value;
+            textManager.Target.GetComponent<TextManager>()
+                .CreatePopUp(transform.position, attackScript.damage, Color.red);
+            HealthChangeServerRpc(-attackScript.damage);
+            healthSlider.value = statBlock.currentHealth.Value;
+        }
     }
 
     public override void OnNetworkSpawn()
@@ -157,8 +185,8 @@ public class PlayerController : NetworkBehaviour
                 TargetClientIds = new[] { client.ClientId }
             }
         };
-        statBlock.UpdateStats(inventoryManager.equipment);
-        inventoryManager.SendStatsToClientRpc(JsonConvert.SerializeObject(statBlock), clientRpcParams);
+        //statBlock.UpdateStats(inventoryManager.equipment);
+        //inventoryManager.SendStatsToClientRpc(JsonConvert.SerializeObject(statBlock), clientRpcParams);
     }
 
 
@@ -171,8 +199,6 @@ public class PlayerController : NetworkBehaviour
         var client = NetworkManager.ConnectedClients[clientId];
         var pc = client.PlayerObject.GetComponent<PlayerController>();
         if (pc.statBlock.CheckMoveCoolDown()) return;
-
-
         var transform2 = client.PlayerObject.transform.position;
         var position = new Vector3(Mathf.RoundToInt(transform2.x), Mathf.RoundToInt(transform2.y), 0);
         var newPosition = new Vector3();
@@ -186,7 +212,6 @@ public class PlayerController : NetworkBehaviour
             else if (moveX > 0 && !east.IsTouchingLayers(layerMask) && !east.IsTouchingLayers(playerMask) &&
                      !east.IsTouchingLayers(enemyMask)) newPosition.x = +1;
         }
-
         if (moveY != 0)
         {
             if (moveY < 0 && !south.IsTouchingLayers(layerMask) && !south.IsTouchingLayers(playerMask) &&
@@ -195,9 +220,7 @@ public class PlayerController : NetworkBehaviour
             else if (moveY > 0 && !north.IsTouchingLayers(layerMask) && !north.IsTouchingLayers(playerMask) &&
                      !north.IsTouchingLayers(enemyMask)) newPosition.y = +1;
         }
-
-        position = new Vector3(newPosition.x + position.x, newPosition.y +
-                                                           position.y, 0);
+        position = new Vector3(newPosition.x + position.x, newPosition.y + position.y, 0);
         pc.statBlock.ResetMoveCoolDown();
         client.PlayerObject.transform.DOMove(position, 5 / pc.statBlock.GetSpeedStat());
         //CHECK IF NEW POSITION IS OUTSIDE OF THE REACH OF THE CHEST YOU ARE IN
@@ -261,12 +284,13 @@ public class PlayerController : NetworkBehaviour
         if (!IsServer)
             return;
         //Debug.Log("Health Change from Server");
-        textManager.target.GetComponent<TextManager>().CreatePopUp(transform.position, i, Color.red);
+        textManager.Target.GetComponent<TextManager>().CreatePopUp(transform.position, i, Color.red);
 
         statBlock.currentHealth.Value += i;
         healthSlider.value = statBlock.currentHealth.Value;
     }
 
+    
     [ServerRpc]
     private void DeathServerRpc(ServerRpcParams rpcParams = default)
     {

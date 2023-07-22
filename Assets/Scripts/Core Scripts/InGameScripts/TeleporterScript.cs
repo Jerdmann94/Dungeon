@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Matchplay.Client;
@@ -54,10 +55,18 @@ public class TeleporterScript : NetworkBehaviour
     [ClientRpc]
     public void AddClientItemToInventoryClientRpc(FixedString512Bytes item, ClientRpcParams clientRpcParams = default)
     {
+        //THSI WILL ALL NEED TO BE CHANGED
+        //I CANT REMEMBER WHY I WROTE IT THIS WAY
         var instanceData = new Dictionary<string, object>();
 
         var gameItem = LootChangerUtil.JsonToItem(item.ToString());
-
+        Debug.Log(gameItem.name);
+        Debug.Log(gameItem.GetType());
+        if (gameItem.GetType() == typeof(GameItem))
+        {
+            DoSellingItem(gameItem);
+            return;
+        }
         var iData = new InstanceData();
         instanceData.Add("Rarity", gameItem.rarity);
         instanceData.Add("ItemId", gameItem.id);
@@ -79,12 +88,35 @@ public class TeleporterScript : NetworkBehaviour
         SendCalltoEconomy(gameItem.name.ToUpper(), options);
     }
 
+    private async void DoSellingItem(GameItem gameItem)
+    {
+        Debug.Log(gameItem.name +" name and value "+ gameItem.value);
+        if (gameItem.value < 1)
+        {
+            return;
+        }
+        await EconomyService.Instance.PlayerBalances.IncrementBalanceAsync("COIN", gameItem.value*gameItem.amountInThisStack);
+    }
+
 
     private async void SendCalltoEconomy(string name, AddInventoryItemOptions options)
     {
-        //Debug.Log(name + " " + options);
+        var eName = name.Replace(' ', '_');
+        eName = eName.Replace("'", "_");
+        
+        Debug.Log(eName + " name and options, last call befor fail " + options);
+        try
+        {
+            var i = await EconomyService.Instance.PlayerInventory.AddInventoryItemAsync(eName, options);
 
-        var i = await EconomyService.Instance.PlayerInventory.AddInventoryItemAsync(name, options);
+        }
+        catch (EconomyValidationException e)
+        {
+            Console.WriteLine(e.Details);
+            
+            throw;
+        }
+      
     }
 
 

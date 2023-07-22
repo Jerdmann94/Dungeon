@@ -15,7 +15,7 @@ public class RightHandGameItem : GameItem
     }
 
     public RightHandGameItem(LootData lootData, int lowAttack, int highAttack,DamageType damageType) : base(lootData.spritePath,
-        lootData.maxSpawnAmount, lootData.stackAmount, lootData.name, OnDropType.RightHandSlot)
+        1, lootData.name, OnDropType.RightHandSlot, lootData.value)
     {
         this.damageType = damageType;
         this.lowAttack = lowAttack;
@@ -64,13 +64,13 @@ public class RightHandGameItem : GameItem
                 highRarityAttack = 8;
                 break;
         }
-      Debug.Log( lowAttack + " low Rarity attack: " +
+      /*Debug.Log( lowAttack + " low Rarity attack: " +
                 lowRarityAttack + " low variance attack: " +
                  lowVarianceAttack);
       Debug.Log( highAttack + " high Rarity attack: " +
                  highRarityAttack + " high variance attack: " +
                  highVarianceAttack +
-                 " Rarity: " + rarity);
+                 " Rarity: " + rarity);*/
       lowAttack += (lowRarityAttack + lowVarianceAttack);
       highAttack += (highRarityAttack + highVarianceAttack);
     }

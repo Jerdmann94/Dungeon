@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30c7689ef1391c64ab65ac582853b8d6, type: 3}
+  m_Name: Jail Orc
+  m_EditorClassIdentifier: 
+  health: 55
+  speed: 9
+  attacks:
+  - {fileID: 11400000, guid: a93756ef0f5aad541a68d0017c173555, type: 2}
+  - {fileID: 11400000, guid: e777f4cc604d12e4cba4a9d75f403e38, type: 2}
+  color: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
+  lootTable: {fileID: 11400000, guid: b7bd4314c3658e248ba5006423952b87, type: 2}
+  isRanged: 1
+  sprite: {fileID: 21300000, guid: b303b47829628fe46a6dfdd4c518637d, type: 3}

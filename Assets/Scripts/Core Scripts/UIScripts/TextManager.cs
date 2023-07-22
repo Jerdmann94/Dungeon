@@ -12,7 +12,7 @@ public class TextManager : NetworkBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        textRefernce.target = gameObject;
+        textRefernce.Target = gameObject;
     }
 
     public void testMethod()
@@ -43,7 +43,8 @@ public class TextManager : NetworkBehaviour
 
         var popUp = obj.GetComponent<PopUpText>();
         popUp.Setup(amount);
-        //popUp.textMeshPro.color = color;
+        popUp.textMeshPro.color = color;
+        
         var rect = popUp.GetComponent<RectTransform>();
         obj.GetComponent<RectTransform>().DOAnchorPos(rect.anchoredPosition + Vector2.up, .1f).SetEase(Ease.OutFlash);
         Destroy(popUp.gameObject, .5f);

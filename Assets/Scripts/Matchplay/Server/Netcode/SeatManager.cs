@@ -45,6 +45,7 @@ using UnityEngine.Serialization;
         void JoinSeat_Server(Matchplayer player)
         {
             m_CurrentSeats.Add(player);
+            
             Debug.Log($"{player.PlayerName} sat at the table. {m_CurrentSeats.Count} sat at the table.");
             //Debug.Log("Calling player to set up inventory");
             //player.transform.SetParent(transform);

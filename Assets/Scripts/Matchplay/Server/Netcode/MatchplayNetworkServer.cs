@@ -124,11 +124,11 @@ namespace Matchplay.Server
             Debug.Log("INSIDE APPROVAL CHECK");
             if (request.Payload.Length > k_MaxConnectPayload)
             {
-                var spawnPoint = GameObject.FindWithTag("SpawnPoint");
+                
                 //Set response data
                 response.Approved = false;
                 response.CreatePlayerObject = false;
-                response.Position = spawnPoint.transform.position;
+                response.Position = Vector3.zero;
                 response.Rotation = null;
                 response.Pending = false;
 
@@ -161,9 +161,10 @@ namespace Matchplay.Server
             Debug.Log("on player joined action invoked" + OnPlayerJoined);
 
             //Set response data
+            var spawnPoint = GameObject.FindWithTag("SpawnPoint");
             response.Approved = true;
             response.CreatePlayerObject = true;
-            response.Position = Vector3.zero;  // THIS IS SPAWNING THE PLAYER POSITION. USE THIS LATER
+            response.Position = spawnPoint.transform.position;  // THIS IS SPAWNING THE PLAYER POSITION. USE THIS LATER
             response.Rotation = Quaternion.identity;
             response.Pending = false;
 
@@ -219,6 +220,7 @@ namespace Matchplay.Server
             networkedMatchPlayer.userData = userData;
 
             OnServerPlayerSpawned?.Invoke(networkedMatchPlayer);
+            
         }
 
         Matchplayer GetNetworkedMatchPlayer(ulong networkId)

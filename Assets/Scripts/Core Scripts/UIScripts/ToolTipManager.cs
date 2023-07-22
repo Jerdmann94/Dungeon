@@ -1,3 +1,5 @@
+using System.Net;
+using MyBox;
 using TMPro;
 using UnityEngine;
 
@@ -14,6 +16,14 @@ public class ToolTipManager : MonoBehaviour
     public TMP_Text mod3;
     public TMP_Text mod4;
     public GameObject toolTip;
+    private RectTransform toolTipRect;
+    public RectTransform canvasRect;
+   
+
+    private void Start()
+    {
+        toolTipRect = toolTip.GetComponent<RectTransform>();
+    }
 
     private void Awake()
     {
@@ -25,11 +35,29 @@ public class ToolTipManager : MonoBehaviour
 
     private void Update()
     {
-        transform.position = Input.mousePosition;
+        
+        Vector2 aPos = Input.mousePosition / canvasRect.localScale.x;
+        if (aPos.x + toolTipRect.rect.width > canvasRect.rect.width)
+        {
+            aPos.x = canvasRect.rect.width - toolTipRect.rect.width;
+        }
+
+        if (aPos.y + toolTipRect.rect.height > canvasRect.rect.height)
+        {
+            aPos.y = canvasRect.rect.height - toolTipRect.rect.height;
+        }
+
+        toolTipRect.anchoredPosition = aPos;
+        //toolTipRect.anchoredPosition = Input.mousePosition;
+        //transform.position = Input.mousePosition;
+
     }
 
     public void ShowToolTip(ToolTipData toolTipData)
     {
+//        Debug.Log("showing tooltip");
+        toolTipRect = toolTip.GetComponent<RectTransform>();
+        
         toolTip.SetActive(true);
         nameText.SetText(toolTipData.name);
 //        Debug.Log(toolTipData.attack);
@@ -38,32 +66,34 @@ public class ToolTipManager : MonoBehaviour
         else
             attack.SetText("Defense = " + toolTipData.defense);
 
-        rarity.SetText(toolTipData.rarity.ToString());
-        slot.SetText(toolTipData.dropType.ToString());
-
-        switch (toolTipData.rarity)
+        if (!toolTipData.rarity.ToString().IsNullOrEmpty())
         {
-            case ItemRarity.Uncommon:
-                rarity.color = Color.green;
-                break;
-            case ItemRarity.Rare:
-                rarity.color = Color.blue;
-                break;
-            case ItemRarity.Epic:
-                rarity.color = Color.magenta;
-                break;
-            case ItemRarity.Legendary:
-                rarity.color = Color.yellow;
-                break;
-            default:
-                rarity.color = Color.white;
-                break;
+            rarity.SetText(toolTipData.rarity.ToString());
+            rarity.color = GetRarityColor(toolTipData.rarity);
         }
 
-        type.SetText(toolTipData.damageType.ToString());
+        if (!toolTipData.dropType.ToString().IsNullOrEmpty())
+        {
+            slot.SetText(toolTipData.dropType.ToString());
+        }
 
+        type.SetText(!toolTipData.damageType.ToString().IsNullOrEmpty()
+            ? toolTipData.damageType.ToString()
+            : toolTipData.amountInThisStack.ToString());
+
+//        Debug.Log(toolTipData.dropType);
+        if (toolTipData.name == "Copper Coin")
+        {
+            slot.SetText(toolTipData.amountInThisStack.ToString());
+            Debug.Log("Amount in this stack " + toolTipData.amountInThisStack.ToString());
+        }
+        
         if (toolTipData.modBlocks == null)
         {
+            mod1.gameObject.SetActive(false);
+            mod2.gameObject.SetActive(false);
+            mod3.gameObject.SetActive(false);
+            mod4.gameObject.SetActive(false);
             return;
         }
 //        Debug.Log(toolTipData.modBlocks.Count);
@@ -106,10 +136,33 @@ public class ToolTipManager : MonoBehaviour
             mod4.gameObject.SetActive(true);
             mod4.SetText(toolTipData.modBlocks[3].text);
         }
+        
     }
 
     public void HideToolTip()
     {
         toolTip.SetActive(false);
     }
+
+    public static Color GetRarityColor(ItemRarity rarity)
+    {
+        switch (rarity)
+        {
+            case ItemRarity.Uncommon:
+                return Color.green;
+                
+            case ItemRarity.Rare:
+                return Color.blue;
+            
+            case ItemRarity.Epic:
+                return Color.magenta;
+                
+            case ItemRarity.Legendary:
+                return Color.yellow;
+                
+            default:
+                return Color.white;
+        }
+    }
+    
 }

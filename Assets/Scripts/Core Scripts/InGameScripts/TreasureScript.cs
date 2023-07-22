@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using MyBox;
 using Newtonsoft.Json;
 using Unity.Collections;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.JsonUtility;
 
@@ -84,20 +86,18 @@ public class TreasureScript : NetworkBehaviour
     {
 //        Debug.Log(json);
         var item = LootChangerUtil.JsonToItem(json);
-        foreach (var VARIABLE in item.modBlocks) Debug.Log(VARIABLE.text);
-
         switch (changeEventType)
         {
             case NetworkListEvent<FixedString512Bytes>.EventType.Add:
                 lootInThisChest.Add(item);
-                //Debug.Log("Adding item to chest, item is " + json);
+                Debug.Log("Adding item to chest, item is " + json);
                 break;
             case NetworkListEvent<FixedString512Bytes>.EventType.Remove:
-                // Debug.Log("Using Remove json = " +json);
+                 Debug.Log("Using Remove json = " +json);
                 lootInThisChest.Remove(lootInThisChest.Find(i => i.id == item.id));
                 break;
             case NetworkListEvent<FixedString512Bytes>.EventType.RemoveAt:
-                //Debug.Log("Removing item at index of "+ index+ " json = " +json);
+                Debug.Log("Removing item at index of "+ index+ " json = " +json);
                 lootInThisChest.RemoveAt(index);
                 break;
             case NetworkListEvent<FixedString512Bytes>.EventType.Insert:
@@ -133,20 +133,20 @@ public class TreasureScript : NetworkBehaviour
 
     private void AddItemsToChestAtThisLocation(LootTable table, TreasureScript ts)
     {
-        foreach (var loot in table.loot)
+        for (var index = 0; index < table.loot.Count; index++)
         {
+            var loot = table.loot[index];
             //IF CHANGE TO ROLL WASNT LOW ENOUGH, CONTINUE TO NEXT ITERATION
-            if (!loot.RollOnTable())
+            if (!loot.RollOnTable(table.spawnChanceIn1000[index]))
                 continue;
             //SPAWN ACTUAL GAME CONTAINER, HAVE TO GET AWAY FROM SCRIPTABLE OBJECT HERE
-            var i = loot.MakeGameContainer();
-            //Debug.Log(i.GetType());
+            var i = loot.MakeGameContainer(table.maxAmountSpawnable[index]);
             ts.lootInThisChest.Add(i);
             ts.listContainer.itemsInServer.Add(i);
             ts.chestJson.Add(ToJson(i));
         }
     }
-
+    
 
     public void AddItemToChest(GameItem item)
     {
@@ -162,14 +162,11 @@ public class TreasureScript : NetworkBehaviour
         if (!IsServer)
             return;
 
-        var i = lootInThisChest.FindIndex(gameItem => gameItem == item);
-
-        lootInThisChest.Remove(item);
-//        Debug.Log("Removing "+ item+ " from chest at index "+i);
-        chestJson.Remove(ToJson(item));
-        var log2 = "";
-        foreach (var VARIABLE in chestJson) log2 += VARIABLE;
-        //        Debug.Log(log2);
+        var i = lootInThisChest.FindIndex(gameItem => gameItem.id == item.id);
+        var gameItem   = lootInThisChest.Find(gameItem => gameItem.id == item.id);
+        lootInThisChest.Remove(gameItem);
+       Debug.Log("Removing "+ gameItem+ " from chest at index "+i);
+       chestJson.RemoveAt(i);
     }
 
     public void UpdateItemInChest()

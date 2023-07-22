@@ -32,11 +32,11 @@ public class DragDropAttackItem : MonoBehaviour, IPointerDownHandler, IBeginDrag
     {
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 
-        var x = attackManager.target.GetComponent<AttackManager>();
+        var x = attackManager.Target.GetComponent<AttackManager>();
 
 
         //RAYCAST TO DRAG POINT
-        attackManager.target.GetComponent<AttackManager>()
+        attackManager.Target.GetComponent<AttackManager>()
             .SpawnAttackItemServerRpc(Camera.main.ScreenToWorldPoint(Input.mousePosition), currentRune.name);
         //Debug.Log("end drag");
     }

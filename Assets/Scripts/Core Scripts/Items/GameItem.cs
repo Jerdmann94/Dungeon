@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using Newtonsoft.Json;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -7,7 +9,7 @@ using Random = UnityEngine.Random;
 [Serializable]
 public class GameItem : GameItemAbs
 {
-    public int maxStackAmount;
+    
     public int amountInThisStack;
     public string name;
     public OnDropType onDropType;
@@ -17,23 +19,31 @@ public class GameItem : GameItemAbs
     public string sellID;
     public ItemRarity rarity;
     public List<ItemModBlock> modBlocks;
+    public int requiredItemLevel;
+    public int value;
 
     [JsonConstructor]
     public GameItem()
     {
     }
 
-    public GameItem(string spritePath, int maxStackAmount, int amountInThisStack, string name, OnDropType onDropType)
+    public GameItem(string spritePath, int amountInThisStack, string name, OnDropType onDropType,int value)
     {
-        this.maxStackAmount = maxStackAmount;
+        this.value = value;
         this.amountInThisStack = amountInThisStack;
         this.name = name;
         this.onDropType = onDropType;
         allowablePosition = onDropType;
         id = Guid.NewGuid().ToString();
         sprite = spritePath;
+        if (allowablePosition == OnDropType.Inventory)
+        {
+            rarity = ItemRarity.Common;
+            return;
+        }
         modBlocks = new List<ItemModBlock>();
         rarity = RollRarity();
+
     }
 
 
@@ -177,7 +187,32 @@ public class GameItem : GameItemAbs
 
     public override ToolTipData GetToolTip()
     {
-        throw new NotImplementedException();
+        var t = new ToolTipData();
+        t.name = name;
+        t.amountInThisStack = amountInThisStack;
+        return t;
+    }
+
+    public string PrintStats()
+    {
+
+        var log = "Item name: " + name +
+                  " Amount in this stack: " + amountInThisStack +
+                  " DropType: " + onDropType +
+                  " AllowablePosition: " + allowablePosition +
+                  " Sprite: " + sprite +
+                  " ID: " + id +
+                  " SellID: " + sellID +
+                  " Rarity: " + rarity +
+                  " RequiredItemLevel: " + requiredItemLevel;
+
+        if (modBlocks == null) return log;
+        foreach (var VARIABLE in modBlocks)
+        {
+            log += " Modblock: " + VARIABLE.text;
+        }
+
+        return log;
     }
 }
 
@@ -190,13 +225,23 @@ public class ToolTipData
     public List<ItemModBlock> modBlocks;
     public string name;
     public ItemRarity rarity;
+    public int amountInThisStack;
+
+    
 }
 
+[Serializable]
 public class ItemModBlock
 {
     public int amount;
     public ItemModifier itemModifier;
     public string text;
+
+    [JsonConstructor]
+    public ItemModBlock()
+    {
+        
+    }
 }
 
 // common = 70%

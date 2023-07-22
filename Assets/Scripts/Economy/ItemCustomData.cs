@@ -8,7 +8,7 @@ public class ItemCustomData
     public int amountInThisStack;
     public int maxStackAmount;
     public string sprite;
-    public OnDropTypeStore onDropType;
+    public OnDropType onDropType;
     public string name;
     public DamageType damageType;
 }

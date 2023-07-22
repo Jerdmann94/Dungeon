@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Matchplay.Client;
+using MyBox;
 using Newtonsoft.Json;
 using Unity.Services.Authentication;
+using Unity.Services.Economy;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Matchmaker.Models;
@@ -200,7 +202,7 @@ public class LobbyManager : MonoBehaviour
             };
             var lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, createLobbyOptions);
             hostLobby = lobby;
-            Debug.Log(lobby.Name + " " + lobby.MaxPlayers + " " + lobby.LobbyCode + " " + lobby.Data);
+//            Debug.Log(lobby.Name + " " + lobby.MaxPlayers + " " + lobby.LobbyCode + " " + lobby.Data);
             await RefreshCurrentLobby();
         }
         catch (Exception e)
@@ -269,25 +271,7 @@ public class LobbyManager : MonoBehaviour
 
     public void AddItemsToUserData()
     {
-        /*if (ClientSingleton.Instance.Manager.User.Data.userGamePreferences== null)
-        {
-            ClientSingleton.Instance.Manager.User.Data.userGamePreferences = new GameInfo();
-        }*/
-
-        //ADDING ITEM IDS AND NOT FULL ITEMS, FULL ITEMS WILL LOAD IN WHEN PLAYER IN GAME
-        /*ClientSingleton.Instance.Manager.User.Data.userGamePreferences.inventoryItems = "";
-        foreach (var gameItem in inventoryManager.lootInInventory)
-        {
-            ClientSingleton.Instance.Manager.User.Data.userGamePreferences.inventoryItems += " "+gameItem.id;
-        }
-        foreach (var keyValuePair in inventoryManager.equipment)
-        {
-            if (keyValuePair.Value == null)
-            {
-                continue;
-            }
-            ClientSingleton.Instance.Manager.User.Data.userGamePreferences.equipment += " "+keyValuePair.Value.id;
-        }*/
+       //adding items to matchmatcher user data
         Debug.Log(ClientSingleton.Instance.Manager.User.Data.userGamePreferences);
         ClientSingleton.Instance.Manager.User.Data.userGamePreferences.inventoryItems = "";
         ClientSingleton.Instance.Manager.User.Data.userGamePreferences.inventoryItems =
@@ -297,6 +281,20 @@ public class LobbyManager : MonoBehaviour
             JsonConvert.SerializeObject(inventoryManager.equipment);
         Debug.Log(ClientSingleton.Instance.Manager.User.Data.userGamePreferences.equipment);
         Debug.Log(ClientSingleton.Instance.Manager.User.Data.userGamePreferences.inventoryItems);
-        //MatchmakerService.Instance.
+        
+        
+       // removing items from economy so that they dont have the items if they die
+       inventoryManager.lootInInventory.ForEach(item =>
+       {
+           EconomyService.Instance.PlayerInventory.DeletePlayersInventoryItemAsync(item.id);
+       });
+       foreach (var keyValuePair in inventoryManager.equipment)
+       {
+           if (keyValuePair.Value == null)
+           {
+               continue;
+           }
+           EconomyService.Instance.PlayerInventory.DeletePlayersInventoryItemAsync(keyValuePair.Value.id);
+       }
     }
 }

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10ad4070ece497b42b2ee73ed78525e9, type: 3}
+  m_Name: WeakAoe
+  m_EditorClassIdentifier: 
+  coolDown: 2
+  attackRange: 1
+  lowAttack: 10
+  highAttack: 20
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 1
+  aoeRange: 1
+  aoeType: 0
+  aoeEffectPrefab: {fileID: 2187938450314871984, guid: f0981fb62ac18634983a14b22971677f, type: 3}
+  listContainer: {fileID: 11400000, guid: d393ab8b92a37f9489350274489aef27, type: 2}

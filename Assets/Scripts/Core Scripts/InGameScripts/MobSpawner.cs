@@ -23,11 +23,12 @@ public class MobSpawner : NetworkBehaviour
     public List<EnemyData> libraryEnemies;
     public List<EnemyData> mushroomEnemies;
     public List<EnemyData> vaultEnemies;
+    public List<EnemyData> universalEnemies;
 
     public void Spawn()
     {
         EnemyData ed = null;
-        Debug.Log(correspondingTile.name);
+        //Debug.Log(correspondingTile.name);
         switch (correspondingTile.name)
         {
             case var _ when correspondingTile.name.Contains("Barracks"):
@@ -79,16 +80,21 @@ public class MobSpawner : NetworkBehaviour
                 ed = vaultEnemies[Random.Range(0, vaultEnemies.Count)];
                 break;
             case var _ when correspondingTile.name.Contains("Wall"):
+                Debug.Log("enemy tried to spawn in wall, destroying enemy");
+                Destroy(this.gameObject);
                 return;
+            default:
+                ed = universalEnemies[Random.Range(0, universalEnemies.Count)];
+                break;
         }
 
-        Debug.Log(correspondingTile.name);
+//        Debug.Log(correspondingTile.name);
         var e = Instantiate(enemyPrefab, transform.position, quaternion.identity);
         e.GetComponent<NetworkObject>().Spawn();
         e.transform.SetParent(transform);
-        var eController = e.GetComponent<BasicEnemy>();
+        var eController = e.GetComponent<EnemyBrain>();
         eController.SetUpEnemyData(ed);
-        var newEnemyId = new Guid().ToString();
+        var newEnemyId = Guid.NewGuid().ToString();
         eController.id = newEnemyId;
         listContainer.enemyLookUp.Add(newEnemyId, eController);
     }

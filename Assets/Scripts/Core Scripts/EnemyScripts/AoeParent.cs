@@ -16,5 +16,11 @@ public class AoeParent : NetworkBehaviour
             await Task.Delay(600);
             GetComponent<NetworkObject>().Despawn();
         }
+
+    }
+    
+    public void SetChildDamage(int damage)
+    {
+        foreach (var child in children) child.damage = damage;
     }
 }

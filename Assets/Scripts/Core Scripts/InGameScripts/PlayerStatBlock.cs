@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Unity.Netcode;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [Serializable]
 [JsonObject(MemberSerialization.OptOut)]
@@ -108,15 +109,15 @@ public class PlayerStatBlock
         //Debug.Log(equipment);
         ResetArmorStats();
         if (equipment != null)
-            
+        {
             foreach (var kp in equipment)
             {
-                var item = kp.Value;
                 if (kp.Value == null)
                 {
                     continue;
                 }
-                Debug.Log(item.allowablePosition);
+                var item = kp.Value;
+//                Debug.Log(item +" "+ item.allowablePosition +" "+ item.name +" "+ item.rarity);
                 //GET DEFENSE AND ATTACK FROM WEAPONS AND ARMOR AND APPLY THEM TO ARMOR DEFENSE/ ARMOR attack high/low
                 switch (kp.Key)
                 {
@@ -138,6 +139,10 @@ public class PlayerStatBlock
                         break;
                     case OnDropType.BootSlot:
                         armorDefense += ((BootGameItem)item).defense;
+                        break;
+                    case OnDropType.AmuletSlot:
+                        break;
+                    case OnDropType.RingSlot:
                         break;
                 }
                 //DOING ARMOR MODIFIERS
@@ -198,6 +203,9 @@ public class PlayerStatBlock
                             break;
                     }
             }
+        }
+            
+            
 
         
         //THEN DO CORE STAT CALCULATIONS
@@ -223,7 +231,7 @@ public class PlayerStatBlock
 
     public void RecieveStatsFromServer(string stat)
     {
-        Debug.Log("Updating stats on client");
+//        Debug.Log("Updating stats on client");
         var s = JsonConvert.DeserializeObject<PlayerStatBlock>(stat);
         might = s.might;
         wit = s.wit;
@@ -388,5 +396,31 @@ public class PlayerStatBlock
     public string GetAttackRangeText()
     {
         return lowAttack + " - " + highAttack;
+    }
+
+    //THIS PROCESS ALSO NEEDS TO BE DONE SERVER SIDE WHICH I THINK IT CURRENTLY IS
+    //THIS IS GOING TO BE A VERY IMPORTANT PROCESS THAT WILL NEED CHANGES OVER TIME. 
+    public int RollDamage(int rangeLow, int rangeHigh, DamageType gameItemDamageType)
+    { 
+        //Debug.Log("Inside damage calculator " + gameItemDamageType);
+        var baseDamage = Random.Range(rangeLow, rangeHigh + 1);
+        var orignalDamage = baseDamage;
+        switch (gameItemDamageType)
+        {
+            case  DamageType.Magical:
+                baseDamage += GetMagicalDamagePoints();
+                baseDamage = (int)Math.Ceiling(baseDamage * (1 + GetMagicDamagePercent()/100));
+                /*Debug.Log("BaseDamge " + orignalDamage +
+                          " point " + GetMagicalDamagePoints() +
+                          " percent " + GetMagicDamagePercent()/100 + 
+                          " total " + baseDamage);*/
+                return baseDamage;
+            case DamageType.Physical:
+                baseDamage += GetPhysicalDamagePoints();
+                baseDamage = (int)Math.Ceiling(baseDamage * (1 + GetPhysicalDamagePercent()/100));
+                return baseDamage;
+                
+        }
+        return 10;
     }
 }

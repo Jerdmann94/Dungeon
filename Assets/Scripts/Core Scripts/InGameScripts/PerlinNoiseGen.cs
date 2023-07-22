@@ -13,6 +13,8 @@ public class PerlinNoiseGen : NetworkBehaviour
     public AstarPath a;
     public List<GameObject> spawners;
     private List<GameObject> phase2NonWalls;
+    public float width;
+    public float height; 
 
     public async void InstantiateMobSpawners()
     {
@@ -25,8 +27,8 @@ public class PerlinNoiseGen : NetworkBehaviour
             phase2NonWalls.Add(child.gameObject);
         }
 
-        float x = 50;
-        float y = 50;
+        float x = width;
+        float y = height;
 
         float startingPerlingNoiseX = Random.Range(-200000, 200000);
         float startingPerlingNoiseY = Random.Range(-200000, 200000);
@@ -67,7 +69,7 @@ public class PerlinNoiseGen : NetworkBehaviour
         Debug.Log("done with mob spawning");
     }
 
-    private void Awake()
+    private void Start()
     {
         SpawnEnemies(); // THIS SHOULD BE MOVED OVER TO SERVER ONLY AFTER TESTING MOVEMENT
        
@@ -76,12 +78,14 @@ public class PerlinNoiseGen : NetworkBehaviour
     //THIS SHOULD BE CALLED BY SERVER WHEN GAME STARTS
     private void SpawnEnemies()
     {
+//        Debug.Log(IsServer);
+  //      Debug.Log("Going into spawners");
         if (IsServer)
         {
             foreach (var spawner in spawners) spawner.GetComponent<MobSpawner>().Spawn();
 
         }
-        Debug.Log("done with mob spawning");
+    //    Debug.Log("done with mob spawning");
     }
 
     private async Task Waiting()

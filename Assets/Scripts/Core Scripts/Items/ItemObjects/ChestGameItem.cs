@@ -1,4 +1,6 @@
 using Newtonsoft.Json;
+using UnityEngine;
+
 
 public class ChestGameItem : GameItem
 {
@@ -10,8 +12,8 @@ public class ChestGameItem : GameItem
     {
     }
 
-    public ChestGameItem(LootData lootData, int d, DamageType damageType) : base(lootData.spritePath,
-        lootData.maxSpawnAmount, lootData.stackAmount, lootData.name, OnDropType.ChestSlot)
+    public ChestGameItem(LootData lootData, int d, DamageType damageType) : base(lootData.spritePath,1
+        , lootData.name, OnDropType.ChestSlot,lootData.value)
     {
         this.damageType = damageType;
         defense = d;

@@ -49,27 +49,53 @@ MonoBehaviour:
   correspondingTile: {fileID: 0}
   enemyPrefab: {fileID: 6199749961775030142, guid: 29c0cc31fd4333b48bbf81f0440382b5, type: 3}
   barracksEnemies:
+  - {fileID: 11400000, guid: 0fc04c0e0fd4e0942a9ed91bc4e431d8, type: 2}
+  - {fileID: 11400000, guid: 20c520f134b0ae341b43758e947af528, type: 2}
   - {fileID: 11400000, guid: 6552d29b375edae428ce264c9bf21f4a, type: 2}
   bathEnemies:
+  - {fileID: 11400000, guid: 3f83f3d6fdee33d489fdbff0b0cb3e02, type: 2}
   - {fileID: 11400000, guid: e2ccd65837fbeb4468394cf8446b9ca3, type: 2}
+  - {fileID: 11400000, guid: c6998650e0e80b748b6ab1d86ed5a168, type: 2}
   beastEnemies:
+  - {fileID: 11400000, guid: 5d8b64facb8fdb74394acc09df7fea92, type: 2}
+  - {fileID: 11400000, guid: a8f8e0f90cbeff443b89b03be04f4c68, type: 2}
   - {fileID: 11400000, guid: c8f892ca55314d94487911840fd13f12, type: 2}
   excavationEnemies:
+  - {fileID: 11400000, guid: c000bd25d937d28499b9f0086f06dbf3, type: 2}
+  - {fileID: 11400000, guid: 6bfe92a2f63057441bc50ce5c6f163f7, type: 2}
   - {fileID: 11400000, guid: 45a1cc08f4237f74c872d13d87c4267f, type: 2}
   forgeEnemies:
+  - {fileID: 11400000, guid: 5f01a8754f9b1d04eae83e2333a00e01, type: 2}
+  - {fileID: 11400000, guid: 82648475ffa66ac459aa1dd6148d7a20, type: 2}
   - {fileID: 11400000, guid: 61d19fa525c943d49a26c9ec3340c343, type: 2}
   jailEnemies:
   - {fileID: 11400000, guid: 8fe10076351cd7a478d8229272cbbab2, type: 2}
+  - {fileID: 11400000, guid: 6671824751b2b3142ad521354543f5e1, type: 2}
+  - {fileID: 11400000, guid: 0eaae50dbb560cd409856399481db69b, type: 2}
   kitchenEnemies:
   - {fileID: 11400000, guid: e3d58af266ace1d4c8e2ebe064ef4844, type: 2}
+  - {fileID: 11400000, guid: dfcb53088d6cbdc41ace20cfb04b1a14, type: 2}
+  - {fileID: 11400000, guid: 63da890dd32954e4695415847c954317, type: 2}
   larderEnemies:
+  - {fileID: 11400000, guid: 09e018c217013884a9282caa807478cc, type: 2}
+  - {fileID: 11400000, guid: 753d7f88111d5a545b24a071b6366cb1, type: 2}
   - {fileID: 11400000, guid: 592d2c71f80e89b4294a044ad9de1666, type: 2}
   libraryEnemies:
   - {fileID: 11400000, guid: 98b371c368ebce44d94a6f87ca358384, type: 2}
+  - {fileID: 11400000, guid: c274d8cf9913aa74aa8bca4889b65734, type: 2}
+  - {fileID: 11400000, guid: 60412fdfeee432f4b811ff54d4f2babc, type: 2}
   mushroomEnemies:
   - {fileID: 11400000, guid: 2ffd7b0a89f525345a559a188d995066, type: 2}
+  - {fileID: 11400000, guid: cd1c0fcce2fff664d9516317d0bbd391, type: 2}
+  - {fileID: 11400000, guid: 44ef943a0a50c1242acb23424f5a3640, type: 2}
   vaultEnemies:
+  - {fileID: 11400000, guid: 218586d4ebd25c246997be01565bab7d, type: 2}
+  - {fileID: 11400000, guid: 35c740022d6c2574ea5aa98b7bde533c, type: 2}
   - {fileID: 11400000, guid: 4e4214b18d48d5a4680b7c71414d1c87, type: 2}
+  universalEnemies:
+  - {fileID: 11400000, guid: e14265e4047c94f4397494e503317dfd, type: 2}
+  - {fileID: 11400000, guid: 8ba172165f30c3a4db5c08cda70e076e, type: 2}
+  - {fileID: 11400000, guid: fb5b30ca4bee78c42ae4e75dfda7ec70, type: 2}
 --- !u!114 &368077352219779028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,5 +110,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 951099334
   AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1

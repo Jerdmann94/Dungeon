@@ -3,23 +3,28 @@ using UnityEngine;
 
 public class CoinStack : GameItem
 {
+
+   
+    
     [JsonConstructor]
     public CoinStack()
     {
     }
 
-    public CoinStack(LootData lootData) : base(lootData.spritePath, lootData.maxSpawnAmount,
-        Random.Range(1, lootData.maxSpawnAmount),
+    public CoinStack(LootData lootData, int range) : base(lootData.spritePath,
+        range,
         lootData.name,
-        OnDropType.Inventory)
+        OnDropType.Inventory,lootData.value)
     {
+   
     }
 
     public override ToolTipData GetToolTip()
     {
         var t = new ToolTipData();
-        t.rarity = rarity;
-        t.dropType = onDropType;
+        t.name = name;
+        t.amountInThisStack = amountInThisStack;
+        
         return t;
     }
 }
