@@ -63,7 +63,7 @@ public class AoeAround : EnemyAttack
         var damage = Random.Range(lowAttack, highAttack);
         foreach (var vec2 in correctPos)
         {
-            Debug.Log("spawning aoe effect");
+//            Debug.Log("spawning aoe effect");
             var o = Instantiate(aoeEffectPrefab,vec2,quaternion.identity);
             o.GetComponent<AttackScript>().Init(damage);
             

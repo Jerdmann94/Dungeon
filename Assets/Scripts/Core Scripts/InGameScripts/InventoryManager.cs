@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static UnityEngine.JsonUtility;
+using Random = UnityEngine.Random;
 
 public class InventoryManager : NetworkBehaviour
 
@@ -37,6 +38,7 @@ public class InventoryManager : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
         equipment = EquipmentUtil.InitEquip();
         inventoryOC.Target = inventoryParent;
         lootInInventory = new List<GameItem>();
@@ -53,7 +55,7 @@ public class InventoryManager : NetworkBehaviour
 
         foreach (Transform child in inventoryParent.transform) Destroy(child);
         
-       base.OnNetworkSpawn();
+      
     }
 
     
@@ -121,12 +123,21 @@ public class InventoryManager : NetworkBehaviour
 
     public async void SetUpInitialInventoryAndEquipment(Matchplayer matchplayer)
     {
+        
+        
+        
         var userData = matchplayer.userData;
         var client = NetworkManager.ConnectedClients[userData.networkId];
         var ivObj = client.OwnedObjects[0].GetComponent<PlayerController>();
         var iv = ivObj.inventoryManager.GetComponent<InventoryManager>();
         ivObj.statBlock = new PlayerStatBlock();
         Debug.Log(client.ClientId);
+        // MOVING SPAWN LOCATION CAUSE DOING IT ELSE WHERE BREAKS THE SERVER
+        var spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+        Debug.Log("Spawnpoints count " + spawnPoints.Length);
+        var spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length - 1)];
+        spawnPoint.tag = "Spawned";
+        ivObj.transform.position = spawnPoint.transform.position;
         if (listContainer.playerLookUp.ContainsKey(userData.userName))
         {
             listContainer.playerLookUp.Remove(userData.userName);

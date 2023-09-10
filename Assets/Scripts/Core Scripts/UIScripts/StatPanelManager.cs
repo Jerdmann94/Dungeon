@@ -31,7 +31,7 @@ public class StatPanelManager : MonoBehaviour
         witText.SetText(statBlock.GetWit().ToString());
         willText.SetText(statBlock.GetWill().ToString(CultureInfo.CurrentCulture));
         intelligenceText.SetText(statBlock.GetIntelligence().ToString());
-        healthText.SetText(statBlock.currentHealth.Value + " / " + statBlock.maxHealth.Value);
+        healthText.SetText(statBlock.CurrentHealth + " / " + statBlock.MaxHealth);
         speedText.SetText(statBlock.GetSpeedStat().ToString(CultureInfo.CurrentCulture));
         physDamagePointsText.SetText(statBlock.GetPhysicalDamagePoints().ToString());
         magicalDamagePointsText.SetText(statBlock.GetMagicalDamagePoints().ToString());

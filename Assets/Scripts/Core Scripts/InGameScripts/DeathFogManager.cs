@@ -159,8 +159,8 @@ public class DeathFogManager : NetworkBehaviour
             randomY += currentRandY;
             safeCenterX = (int)(gridSize / 2f) + randomX;
             safeCenterY = (int)(gridSize / 2f) + randomY;
-            Debug.Log("fogringdiameter " + fogRingDiamter + " previous diameter " + previousDiameter +" ringdif "+ringDif);
-            Debug.Log("safex " + safeCenterX + " safey " + safeCenterY + " randx " + randomX +" randy "+randomY+ " curentrandx " + currentRandX +" currendrandy "+currentRandY +" fog radius " + fogRingRadius);
+//            Debug.Log("fogringdiameter " + fogRingDiamter + " previous diameter " + previousDiameter +" ringdif "+ringDif);
+  //          Debug.Log("safex " + safeCenterX + " safey " + safeCenterY + " randx " + randomX +" randy "+randomY+ " curentrandx " + currentRandX +" currendrandy "+currentRandY +" fog radius " + fogRingRadius);
 
             breakCheck++;
             if (breakCheck > 10)

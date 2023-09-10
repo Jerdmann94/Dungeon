@@ -40,22 +40,27 @@ public class PlayerController : NetworkBehaviour
     public NetworkList<FixedString512Bytes> equipJson;
 
 
-    private Camera mainCam;
+    public Camera mainCam;
     public float fogDamageTimer = 2f;
    
 
     private void Awake()
     {
         equipJson = new NetworkList<FixedString512Bytes>();
+        
         if (!IsServer) return;
     }
 
     private void Update()
     {
-        // -------------  CAMERA STUFF --------------------------
-        var position = transform.position;
-        if (mainCam == null) mainCam = Camera.main;
-        mainCam!.transform.position = new Vector3(position.x, position.y, -10);
+        if (!IsServer && IsOwner)
+        {
+            // -------------  CAMERA STUFF --------------------------
+            var position = transform.position;
+            if (mainCam == null) mainCam = Camera.main;
+            mainCam!.transform.position = new Vector3(position.x, position.y, -10);
+        }
+        
         if (!GameMaster.gameStartStatic)
         {
             return;
@@ -63,20 +68,14 @@ public class PlayerController : NetworkBehaviour
         //-----------------------------SERVER STUFF
         if (IsServer)
         {
-            foreach (var client in NetworkManager.ConnectedClients.Values)
+            
+            statBlock.UpdateMoveCooldown();
+            if (digCoolDown.Value > 0) digCoolDown.Value -= Time.deltaTime;
+            if (fogDamageTimer > 0) fogDamageTimer -= Time.deltaTime;
+            if (!DeathFogManager.CheckFogSafety(transform.position)&& fogDamageTimer <= 0)
             {
-                var pc = client.PlayerObject.GetComponent<PlayerController>();
-                pc.statBlock.UpdateMoveCooldown();
-
-                if (pc.digCoolDown.Value > 0) pc.digCoolDown.Value -= Time.deltaTime;
-                if (pc.fogDamageTimer > 0) pc.fogDamageTimer -= Time.deltaTime;
-                if (!DeathFogManager.CheckFogSafety(pc.transform.position)&& pc.fogDamageTimer <= 0)
-                {
-                    pc.HealthChangeFromServer(10);
-                    pc.fogDamageTimer = 2f;
-                }
-
-                
+                HealthChangeFromServer(-10);
+                fogDamageTimer = 2f;
             } 
         }
             
@@ -87,8 +86,9 @@ public class PlayerController : NetworkBehaviour
         //-----------------------------CHECK FOR DEATH -------------------------
             //DISABLING DEATH CHECK DURING OTHER TESTING
 
-            if (statBlock.currentHealth.Value <= 0)
-            {
+            if (statBlock.CurrentHealth <= 0)
+            { 
+                Debug.Log("player death, current health less than 0 " + statBlock.CurrentHealth);
                 ClientSingleton.Instance.Manager.Disconnect();
                 //DeathServerRpc();
             }
@@ -135,7 +135,7 @@ public class PlayerController : NetworkBehaviour
             textManager.Target.GetComponent<TextManager>()
                 .CreatePopUp(transform.position, attackScript.damage, Color.red);
             HealthChangeServerRpc(-attackScript.damage);
-            healthSlider.value = statBlock.currentHealth.Value;
+            healthSlider.value = statBlock.CurrentHealth;
         }
     }
 
@@ -146,20 +146,12 @@ public class PlayerController : NetworkBehaviour
 
 
         inventoryManager.pc = this;
-        statBlock.currentHealth.OnValueChanged += (value, newValue) =>
-        {
-            //Debug.Log(value + " new value " + newValue);
-            healthSlider.value = newValue;
-        };
-        statBlock.maxHealth.OnValueChanged += (value, newValue) =>
-        {
-            //Debug.Log(value + " new value " + newValue);
-            healthSlider.maxValue = newValue;
-        };
+        
+        
         if (!IsOwner) return;
-        mainCam = Camera.main;
+        //mainCam = Camera.main;
 
-        MovePlayerToSpawnServerRpc();
+        //MovePlayerToSpawnServerRpc();
 
         equipJson ??= new NetworkList<FixedString512Bytes>();
         equipJson.OnListChanged += inventoryManager.UpdateInventoryDelegate;
@@ -274,9 +266,21 @@ public class PlayerController : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void HealthChangeServerRpc(int i)
+    private void HealthChangeServerRpc(int i, ServerRpcParams serverRpcParams = default)
     {
         HealthChangeFromServer(i);
+        
+        /*var clientId = serverRpcParams.Receive.SenderClientId;
+        if (!NetworkManager.ConnectedClients.ContainsKey(clientId)) return;
+        var client = NetworkManager.ConnectedClients[clientId];
+        var clientRpcParams = new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new[] { client.ClientId }
+                }
+            };
+        HealthChangeClientRpc(i, clientRpcParams);*/
     }
 
     public void HealthChangeFromServer(int i)
@@ -285,9 +289,23 @@ public class PlayerController : NetworkBehaviour
             return;
         //Debug.Log("Health Change from Server");
         textManager.Target.GetComponent<TextManager>().CreatePopUp(transform.position, i, Color.red);
+        //healthSlider.value = statBlock.currentHealth.Value;
+        healthSlider.maxValue = statBlock.MaxHealth;
+        healthSlider.value = statBlock.CurrentHealth;
+        HealthChangeClientRpc(i);
+       
+    }
 
-        statBlock.currentHealth.Value += i;
-        healthSlider.value = statBlock.currentHealth.Value;
+    [ClientRpc]
+    public void HealthChangeClientRpc(int i,ClientRpcParams clientRpcParams = default)
+    {
+        Debug.Log(statBlock.CurrentHealth + " current health " +
+                  statBlock.MaxHealth + " max health");
+        statBlock.CurrentHealth += i;
+        Debug.Log(statBlock.CurrentHealth + " current health " +
+                  statBlock.MaxHealth + " max health");
+        healthSlider.maxValue = statBlock.MaxHealth;
+        healthSlider.value = statBlock.CurrentHealth;
     }
 
     

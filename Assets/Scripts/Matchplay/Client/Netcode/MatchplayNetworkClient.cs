@@ -17,7 +17,7 @@ namespace Matchplay.Client
         /// Time in seconds before the client considers a lack of server response a timeout
         /// </summary>
         const int k_TimeoutDuration = 10;
-        NetworkManager m_NetworkManager;
+        public NetworkManager m_NetworkManager;
 
         /// <summary>
         /// If a disconnect occurred this will be populated with any contextual information that was available to explain why.

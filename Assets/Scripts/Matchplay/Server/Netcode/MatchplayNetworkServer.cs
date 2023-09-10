@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Matchplay.Networking;
 using Unity.Collections;
@@ -9,6 +10,7 @@ using Matchplay.Shared;
 using Matchplay.Shared.Tools;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 namespace Matchplay.Server
 {
@@ -85,7 +87,7 @@ namespace Matchplay.Server
             async Task WaitUntilSceneLoaded()
             {
                 while (!localNetworkedSceneLoaded)
-                    await Task.Delay(50);
+                    await Task.Delay(500);
             }
 
             if (await Task.WhenAny(waitTask, Task.Delay(5000)) != waitTask)
@@ -161,16 +163,24 @@ namespace Matchplay.Server
             Debug.Log("on player joined action invoked" + OnPlayerJoined);
 
             //Set response data
-            var spawnPoint = GameObject.FindWithTag("SpawnPoint");
+            //PRETTY SURE THIS RESPONSE DATA ISNT USED ANYWHERE AND IS POINTLESS FOR NOW
+           
+            /*var spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+            Debug.Log("Spawnpoints count " + spawnPoints.Length);
+            var spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length - 1)];
+            spawnPoint.tag = "Spawned";*/
             response.Approved = true;
             response.CreatePlayerObject = true;
-            response.Position = spawnPoint.transform.position;  // THIS IS SPAWNING THE PLAYER POSITION. USE THIS LATER
+            
+            //response.Position = spawnPoint.transform.position;  // THIS IS SPAWNING THE PLAYER POSITION. USE THIS LATER
             response.Rotation = Quaternion.identity;
             response.Pending = false;
 
             //connection approval will create a player object for you
             //Run an async 'fire and forget' task to setup the player network object data when it is intiialized, uses main thread context.
             var scheduler = TaskScheduler.FromCurrentSynchronizationContext();
+            
+           // Debug.Log("Moving player "+ request.ClientNetworkId+" to spawn point" + spawnPoint.transform.position);
             Task.Factory.StartNew(
                 async () => await SetupPlayerPrefab(request.ClientNetworkId, userData.userName,userData), 
                 System.Threading.CancellationToken.None, 
@@ -212,13 +222,11 @@ namespace Matchplay.Server
                 await Task.Delay(100);
             }
             while (playerNetworkObject == null);
-
-            // get this client's player NetworkObject
             var networkedMatchPlayer = GetNetworkedMatchPlayer(networkId);
+            networkedMatchPlayer.transform.position = new Vector3(0, 0, 0);
             networkedMatchPlayer.PlayerName.Value = playerName;
             networkedMatchPlayer.PlayerColor.Value = Customization.IDToColor(networkId);
             networkedMatchPlayer.userData = userData;
-
             OnServerPlayerSpawned?.Invoke(networkedMatchPlayer);
             
         }

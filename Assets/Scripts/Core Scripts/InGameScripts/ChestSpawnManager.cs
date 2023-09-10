@@ -8,8 +8,9 @@ public class ChestSpawnManager : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        listContainer.Init();
         base.OnNetworkSpawn();
+        listContainer.Init();
+        
     }
 
     public void SpawnChest(Vector3 pos, LootTable lootTable)

@@ -68,10 +68,10 @@ public class EnemyWave : EnemyAttack
                         {
                             foreach (var vector2Int in wave1NS)
                             {
-                                Debug.Log(vector2Int);
+//                                Debug.Log(vector2Int);
                                 
                                 var loc = new Vector2(dir.x + vector2Int.x, dir.y + vector2Int.y);
-                                Debug.Log(loc);
+//                                Debug.Log(loc);
                                 var test1 = Physics2D.Raycast(
                                     currentPos,vector2Int ,.5f, wallLayer);
                                 Debug.DrawRay(currentPos, new Vector3(vector2Int.x,vector2Int.y,0), Color.cyan, 1.5f, false);

@@ -37,11 +37,8 @@ public class TreasureScript : NetworkBehaviour
             FillChest(lootTable);
             listContainer.treasureScripts.Add(this);*/
         }
-
-        GetItemsForInitServerRpc(); // GET CLIENT ITEMS IN CHEST FROM SERVER
-
-
         base.OnNetworkSpawn();
+        GetItemsForInitServerRpc(); // GET CLIENT ITEMS IN CHEST FROM SERVER
     }
 
     [ServerRpc(RequireOwnership = false)]

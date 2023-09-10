@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net;
 using MyBox;
 using TMPro;
@@ -6,11 +7,9 @@ using UnityEngine;
 public class ToolTipManager : MonoBehaviour
 {
     public static ToolTipManager instance;
+    public List<TMP_Text> names;
+    public List<TMP_Text> values;
     public TMP_Text nameText;
-    public TMP_Text attack;
-    public TMP_Text rarity;
-    public TMP_Text slot;
-    public TMP_Text type;
     public TMP_Text mod1;
     public TMP_Text mod2;
     public TMP_Text mod3;
@@ -53,40 +52,60 @@ public class ToolTipManager : MonoBehaviour
 
     }
 
+    private void SetActiveToolTip(int i, bool b)
+    {
+      
+        values[i].transform.parent.gameObject.SetActive(b);
+        
+    }
     public void ShowToolTip(ToolTipData toolTipData)
     {
-//        Debug.Log("showing tooltip");
+
         toolTipRect = toolTip.GetComponent<RectTransform>();
-        
         toolTip.SetActive(true);
         nameText.SetText(toolTipData.name);
-//        Debug.Log(toolTipData.attack);
-        if (toolTipData.attack is not (null or ""))
-            attack.SetText("Attack = " + toolTipData.attack);
-        else
-            attack.SetText("Defense = " + toolTipData.defense);
-
-        if (!toolTipData.rarity.ToString().IsNullOrEmpty())
+        nameText.color = GetRarityColor(toolTipData.rarity);
+        for (int i = 0; i < 4; i++)
         {
-            rarity.SetText(toolTipData.rarity.ToString());
-            rarity.color = GetRarityColor(toolTipData.rarity);
+            SetActiveToolTip(i, false);
         }
-
-        if (!toolTipData.dropType.ToString().IsNullOrEmpty())
+        for (int i = 0; i < 4; i++)
         {
-            slot.SetText(toolTipData.dropType.ToString());
-        }
+            if (toolTipData.attack is not (null or ""))
+            {
+                SetActiveToolTip(i, true);
+                names[i].SetText("Attack" );
+                values[i].SetText(toolTipData.attack);
+                i++;
+            }
 
-        type.SetText(!toolTipData.damageType.ToString().IsNullOrEmpty()
-            ? toolTipData.damageType.ToString()
-            : toolTipData.amountInThisStack.ToString());
+            if (toolTipData.defense != 0)
+            {
+                SetActiveToolTip(i, true);
+                names[i].SetText("Defense" );
+                values[i].SetText(toolTipData.defense.ToString());
+                i++;
+                
+            }
+            
+            if (!toolTipData.dropType.ToString().IsNullOrEmpty())
+            {
+                SetActiveToolTip(i, true);
+                names[i].SetText("Slot" );
+                values[i].SetText(toolTipData.dropType.ToString());
+                i++;
+            }
+            
+            if (toolTipData.name == "Copper Coin")
+            {
+                SetActiveToolTip(i, true);
+                names[i].SetText("Amount" );
+                values[i].SetText(toolTipData.amountInThisStack.ToString());
+            }
 
-//        Debug.Log(toolTipData.dropType);
-        if (toolTipData.name == "Copper Coin")
-        {
-            slot.SetText(toolTipData.amountInThisStack.ToString());
-            Debug.Log("Amount in this stack " + toolTipData.amountInThisStack.ToString());
+            break;
         }
+       
         
         if (toolTipData.modBlocks == null)
         {

@@ -157,7 +157,8 @@ using Player = Unity.Services.Matchmaker.Models.Player;
 
             return matchmakingResult.result;
         }
-
+        
+        
         public void Dispose()
         {
             NetworkClient?.Dispose();

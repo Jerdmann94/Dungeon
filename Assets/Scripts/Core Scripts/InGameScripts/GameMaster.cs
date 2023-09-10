@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Matchplay.Server;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -11,7 +12,8 @@ public class GameMaster : NetworkBehaviour
     public static bool gameStartStatic = false;
     public DeathFogManager deathFogManager;
     private int playerCounter;
-    private float startTimer = 12f;
+    private NetworkVariable<float> startTimer = new NetworkVariable<float>(12f);
+    public TMP_Text timer;
     
     public override void OnNetworkSpawn()
     {
@@ -22,6 +24,7 @@ public class GameMaster : NetworkBehaviour
         }
 
         gameStart.OnValueChanged += GameStartChange;
+        startTimer.OnValueChanged += FloatTimerChange;
     }
 
     private void GameStartChange(bool previousvalue, bool newvalue)
@@ -29,6 +32,13 @@ public class GameMaster : NetworkBehaviour
         gameStart.Value = newvalue;
         gameStartStatic = newvalue;
         Debug.Log("Game start value has changed");
+    }
+
+    private void FloatTimerChange(float previous, float newValue)
+    {
+        //Debug.Log(newValue);
+        timer.SetText("Game Starts in " + (int)startTimer.Value);
+        startTimer.Value = newValue;
     }
 
 
@@ -43,15 +53,23 @@ public class GameMaster : NetworkBehaviour
             return;
         if (playerCounter > 0)
         {
-            startTimer -= Time.deltaTime;
+            startTimer.Value -= Time.deltaTime;
+            
         }
 
-        if (startTimer < 0 && gameStart.Value== false)
+        if (startTimer.Value < 0 && gameStart.Value== false)
         {
             
             //--------- start the game
+            DisablePregameTimerClientRpc();
             deathFogManager.StartFog();
             gameStart.Value = true;
         }
+    }
+    
+[ClientRpc]
+    private void DisablePregameTimerClientRpc()
+    {
+        timer.gameObject.SetActive(false);
     }
 }

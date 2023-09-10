@@ -24,10 +24,10 @@ public class PlayerStatBlock
     //MINOR STATS
     //--------------------------------BASE STATS ---------------------------------------
     //BASE 100 - might
-    public NetworkVariable<int> maxHealth = new(100);
+    int maxHealth = 100;
 
     //BASE 100 - might
-    public NetworkVariable<int> currentHealth = new(100);
+    int currentHealth = 100;
 
     //BASE 10 - wit - for each 3 wit +1 speed
     public float speedStat = 10;
@@ -98,6 +98,33 @@ public class PlayerStatBlock
     [JsonConstructor]
     public PlayerStatBlock()
     {
+    }
+
+    /*public override void OnNetworkSpawn()
+    {
+        currentHealth.OnValueChanged += (value, newValue) =>
+        {
+            Debug.Log(value + " new value " + newValue);
+            CurrentHealth = newValue;
+        };
+        maxHealth.OnValueChanged += (value, newValue) =>
+        {
+            Debug.Log(value + " new value " + newValue);
+            MaxHealth = newValue;
+        };
+        base.OnNetworkSpawn();
+    }*/
+
+    public int CurrentHealth
+    {
+        get => currentHealth + armorBonusHealth;
+        set => currentHealth = value;
+    }
+
+    public int MaxHealth
+    {
+        get => maxHealth + armorBonusHealth;
+        set => maxHealth = value;
     }
 
     public void InitStats()
@@ -210,9 +237,9 @@ public class PlayerStatBlock
         
         //THEN DO CORE STAT CALCULATIONS
         //MIGHT
-        maxHealth.Value = 100 + armorBonusHealth + GetMight() * 5;
+        MaxHealth = 100 + armorBonusHealth + GetMight() * 5;
         //Debug.Log("armor bonus health " + armorBonusHealth +" might " + might + " armor might " + armorMight) ;
-        if (currentHealth.Value > maxHealth.Value) currentHealth.Value = maxHealth.Value;
+        if (CurrentHealth > MaxHealth) CurrentHealth = MaxHealth;
         physicalDamagePoints = GetMight();
         //WIT
         speedStat = 10 + GetWit() / 3;
@@ -225,7 +252,7 @@ public class PlayerStatBlock
         gestation = 5 + GetIntelligence() * .25f;
 
         //Debug.Log("right before send stats to client");
-        var sb = JsonConvert.SerializeObject(this);
+        //var sb = JsonConvert.SerializeObject(this);
 //        Debug.Log(sb);
     }
 
@@ -295,6 +322,7 @@ public class PlayerStatBlock
 
     public void UpdateMoveCooldown()
     {
+        //Debug.Log(movementCD);
         if (movementCD > 0) movementCD -= Time.deltaTime;
     }
 

@@ -32,6 +32,12 @@ public class JacobBootStrapper : MonoBehaviour
 
         //If this is a build and we are headless, we are a server
 
+        if (IsServer)
+        {
+            return;
+        }
+        IsServer = true;
+        
         await LaunchInMode(SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null);
     }
 

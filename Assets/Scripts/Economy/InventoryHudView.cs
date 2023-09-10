@@ -61,27 +61,27 @@ public class InventoryHudView : MonoBehaviour
         {
             JObject instanceText = JObject.Parse(item.InstanceData.GetAsString());
             InstanceData results = instanceText["InstanceData"].ToObject<InstanceData>();
-            Debug.Log(results.ToString());
+           // Debug.Log(results.ToString());
             //var idata = item.InstanceData.GetAs<InstanceData>();
             idata = results;
         }
 //        Debug.Log(item.PlayersInventoryItemId);
         var idef = await item.GetItemDefinitionAsync();
 //            Debug.Log(idef.Name);
-        Debug.Log(idef.CustomDataDeserializable.GetAsString());
+        //Debug.Log(idef.CustomDataDeserializable.GetAsString());
         var cData =  idef.CustomDataDeserializable.GetAs<ItemCustomData>();
         var newInventoryItemGameObject = Instantiate(inventoryItemPrefab, stashOCTransform);
         var dd = newInventoryItemGameObject.GetComponent<DragAndDropStore>();
         dd.data = cData;
         dd.econInventoryId = item.PlayersInventoryItemId;
         dd.preDragLocation = OnDropType.Inventory;
-        Debug.Log(item.PlayersInventoryItemId + " " + item.InventoryItemId);
+//        Debug.Log(item.PlayersInventoryItemId + " " + item.InventoryItemId);
         var i = await lootChangerUtil.StringLookUp(cData, idata, item.PlayersInventoryItemId);
         dd.SetUpItem(i);
         dd.SetIconSprite(SpriteUtil.GetSprite(cData.sprite));
         i.sprite = cData.sprite;
         inventoryManager.lootInStash.Add(i);
-
+        
 
     }
 
@@ -97,6 +97,8 @@ public class InventoryHudView : MonoBehaviour
             
             DestroyImmediate(sellingOCTransform.GetChild(0).gameObject);
         }
+
+   
 
         var e = inventoryManager.equipment;
 
@@ -187,6 +189,7 @@ public class InventoryHudView : MonoBehaviour
         foreach (var gameItem in stash)
         {
             SpawnItemUI(stashOCTransform, OnDropType.Stash,gameItem);
+            
         }
         Debug.Log("items in selling " + selling.Count);
         foreach (var gameItem in selling)

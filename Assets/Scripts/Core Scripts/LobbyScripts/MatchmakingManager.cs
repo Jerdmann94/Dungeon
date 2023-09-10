@@ -1,12 +1,18 @@
 using System;
 using Matchplay.Client;
 using Matchplay.Shared;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MatchmakingManager : MonoBehaviour
 {
     public LobbyManager lobbyManager;
-
+    public TabMaster tabMaster;
+    public GameObject ticketUI;
+    public TMP_Text timerUI;
+    public float timer;
+    
 
     //MATCHMAKING STUFF
     [SerializeField] private ClientSingleton m_ClientPrefab;
@@ -31,19 +37,27 @@ public class MatchmakingManager : MonoBehaviour
     private string m_LocalPort;
 
 
-    private async void OnEnable()
+    private async void Start()
     {
-//        Debug.Log("Start of Scene ");
+        
+        Debug.Log("Start of Scene ");
         //SetUpMatchMaker();
         var clientSingleton = Instantiate(m_ClientPrefab);
         clientSingleton.CreateClient("Default");
         SetUpInitialState();
         lobbyManager.InitLobby();
+        ticketUI.SetActive(false);
         //Default mode is Matchmaker
         //SetMatchmakerMode();
 
         m_AuthState = await AuthenticationWrapper.Authenticating();
+        
+        ClientSingleton.Instance.Manager.NetworkClient.m_NetworkManager.OnClientDisconnectCallback +=
+            clientDisconnected;
+        
     }
+
+    
 
     /*private async void SetUpMatchMaker()
     {
@@ -73,6 +87,7 @@ public class MatchmakingManager : MonoBehaviour
         gameManager.SetGameQueue(Enum.Parse<GameQueue>("Casual"));
         m_LocalPort = "7777";
         m_LocalIP = "127.0.0.1";
+        
     }
 
 
@@ -88,6 +103,7 @@ public class MatchmakingManager : MonoBehaviour
 
     public async void PlayButtonPressed()
     {
+        
         lobbyManager.AddItemsToUserData();
         if (m_LocalLaunchMode)
         {
@@ -98,6 +114,7 @@ public class MatchmakingManager : MonoBehaviour
         }
         else
         {
+            ticketUI.SetActive(true);
             if (gameManager.Matchmaker.IsMatchmaking)
             {
                 Debug.LogWarning("Already matchmaking, please wait or cancel.");
@@ -105,6 +122,52 @@ public class MatchmakingManager : MonoBehaviour
             }
 
             var matchResult = await gameManager.GetMatchAsync(lobbyManager.hostLobby);
+            switch (matchResult)
+            {
+                case MatchmakerPollingResult.Success:
+                    break;
+                case MatchmakerPollingResult.TicketCreationError:
+                    CancelPressed();
+                    break;
+                case MatchmakerPollingResult.TicketCancellationError:
+                    CancelPressed();
+                    break;
+                case MatchmakerPollingResult.TicketRetrievalError:
+                    CancelPressed();
+                    break;
+                case MatchmakerPollingResult.MatchAssignmentError:
+                    CancelPressed();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            Debug.Log(matchResult);
         }
+    }
+
+    public void CancelPressed()
+    {
+        gameManager.CancelMatchmaking();
+        ticketUI.SetActive(false);
+    }
+
+    public void clientDisconnected(ulong clientId)
+    {
+        Debug.Log("Client disconnect from matchmaking manager");
+        ticketUI.SetActive(false);
+        tabMaster.PressedPlay();
+    }
+
+    private void Update()
+    {
+        if (ticketUI.activeSelf)
+        {
+            timer += Time.deltaTime;
+        }
+        else
+            timer = 0;
+
+        timerUI.SetText(((int)timer).ToString());
+
     }
 }

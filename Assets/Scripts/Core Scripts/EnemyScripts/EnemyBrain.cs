@@ -71,13 +71,14 @@ public class EnemyBrain : NetworkBehaviour, IEffectable
         {
             return;
         }
+        base.OnNetworkSpawn();
         currentHealth.OnValueChanged += (value, newValue) =>
         {
             Debug.Log(value + " new value " + newValue);
             healthSlider.value = newValue;
         };
         SetupClientData();
-        base.OnNetworkSpawn();
+        
     }
 
     private void SetupClientData()

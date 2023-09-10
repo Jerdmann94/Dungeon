@@ -8,6 +8,7 @@ using Unity.Services.Authentication;
 using Unity.Services.Economy;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
+using Unity.Services.Matchmaker;
 using Unity.Services.Matchmaker.Models;
 using UnityEngine;
 using Player = Unity.Services.Lobbies.Models.Player;
@@ -20,7 +21,7 @@ public class LobbyManager : MonoBehaviour
     public ServerListContent serverListContent;
     public ShopSceneManager shopSceneManager;
     public CurrentLobbyManager currentLobbyManager;
-
+    public TabMaster tabMaster;
 
     public LobbyInventoryManager inventoryManager;
     private float heartBeatTimer;
@@ -53,11 +54,11 @@ public class LobbyManager : MonoBehaviour
             if (hostLobby.Data.ContainsKey("Ip") &&
                 p.Id != hostLobby.HostId) //CHECKING FOR TICKET ASSIGNMENT IF YOU ARE NOT HOST
             {
-                /*var ticket = await MatchmakerService.Instance.GetTicketAsync(hostLobby.Data["TicketId"].Value);
+                var ticket = await MatchmakerService.Instance.GetTicketAsync(hostLobby.Data["TicketId"].Value);
                 if (ticket != null)
                 {
                     HandleTicket(ticket);
-                }*/
+                }
                 var ip = hostLobby.Data["Ip"].Value;
                 var port = int.Parse(hostLobby.Data["Port"].Value);
                 ClientSingleton.Instance.Manager.BeginConnection(ip, port);
@@ -84,10 +85,10 @@ public class LobbyManager : MonoBehaviour
         {
             case MultiplayAssignment.StatusOptions.Found:
                 Debug.Log("Found connection for client that is not host, begin joining ip and port");
-                ClientSingleton.Instance.Manager.BeginConnection(assignment.Ip, (int)assignment.Port);
+                //ClientSingleton.Instance.Manager.BeginConnection(assignment.Ip, (int)assignment.Port);
                 break;
             case MultiplayAssignment.StatusOptions.InProgress:
-                //...
+                Debug.Log("ticket in progress");
                 break;
             case MultiplayAssignment.StatusOptions.Failed:
 
@@ -114,6 +115,7 @@ public class LobbyManager : MonoBehaviour
     public async void InitLobby()
     {
         playerName = "TestName" + Random.Range(1, 99);
+        tabMaster.MakeSureLoadingIsOn();
         // Debug.Log(serverListContent);
         try
         {
@@ -123,13 +125,22 @@ public class LobbyManager : MonoBehaviour
                 await ListLobbies();
                 await currentLobbyManager.SpawnPlayerPrefabs(hostLobby, this);
                 await shopSceneManager.InitShop();
+                tabMaster.PressedPlay();
+                Debug.Log("pressed play");
             };
 
+           
+          
             //await AuthenticationService.Instance.SignInAnonymouslyAsync();
         }
         catch (Exception e)
         {
             Debug.Log(e);
+        }
+
+        if (AuthenticationService.Instance.IsSignedIn)
+        {
+            tabMaster.PressedPlay();
         }
     }
 

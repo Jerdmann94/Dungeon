@@ -100,7 +100,7 @@ public class LootChangerUtil : MonoBehaviour
         }
         var t = JObject.Parse(json)["allowablePosition"].ToObject<OnDropType>();
         GameItem g = null;
-        Debug.Log(t);
+//        Debug.Log(t);
 
         switch (t)
         {
